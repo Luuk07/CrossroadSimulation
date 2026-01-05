@@ -114,6 +114,7 @@ namespace AmpelSimulation.Classes.Container
             switch (LaneID)
             {
                 case 1:      
+                    // Fahren bis zu einem bestimmten Punkt dann switch Lane
                     CurrentLane.ID = 4;
                     //PositionX -= Speed;
                     break;
