@@ -29,7 +29,8 @@ namespace AmpelSimulation.Classes.Services
         public CclSvcCreatAll Creat { get; set; } = new CclSvcCreatAll();
       
         public CclSvcHandleLight LightHandler { get; set; } = new CclSvcHandleLight();
-
+        //
+        public event EventHandler E_MoveCar;
 
         public CclSvcHandleCrossroad() 
         {
@@ -39,6 +40,7 @@ namespace AmpelSimulation.Classes.Services
             TrafficLights = Creat.TrafficLights;
             LightHandler.TrafficLights = TrafficLights;
             LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+            
         }
 
       
@@ -48,7 +50,7 @@ namespace AmpelSimulation.Classes.Services
             Car = Creat.CreateNewCar();
             int laneID = CclRandom.Random.Next(1, 5);
             var trafficLight = TrafficLights.FirstOrDefault(tl => tl.ID == laneID);
-            CarHandler = new CclSvcHandleCar(Car, trafficLight);
+            CarHandler = new CclSvcHandleCar(Car, trafficLight, LightHandler);
             l_CarHandler.Add(CarHandler);
         }
         // Move cars in the crossroad
@@ -59,16 +61,17 @@ namespace AmpelSimulation.Classes.Services
                 // Move each car based on its handler
                 if(IsDistanceBetweenCarInFrontEnough(carHandler))
                 {
-                    carHandler.Car.StraightAhead(carHandler.LaneID);
+                    carHandler.Car.StraightAhead(carHandler.Car.CurrentLane.ID);
+                    E_MoveCar?.Invoke(this, EventArgs.Empty);
                 }
             }
         }
         // Check distance between cars in the same line
         public bool IsDistanceBetweenCarInFrontEnough(CclSvcHandleCar currentCarHandler)
         {
-           foreach (var CarHandler in l_CarHandler.Where(c=> c.LaneID == currentCarHandler.LaneID && !ReferenceEquals(c, currentCarHandler)))
+           foreach (var CarHandler in l_CarHandler.Where(c=> c.Car.CurrentLane.ID == currentCarHandler.Car.CurrentLane.ID && !ReferenceEquals(c, currentCarHandler)))
             {
-                switch(CarHandler.LaneID)
+                switch(CarHandler.Car.CurrentLane.ID)
                 {
                     case 1:
                         if (currentCarHandler.Car.PositionY - SpaceBetweenCar <= CarHandler.Car.PositionY)

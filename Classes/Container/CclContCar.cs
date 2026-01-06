@@ -169,11 +169,11 @@ namespace AmpelSimulation.Classes.Container
             {
                 case 1:      
                     // Fahren bis zu einem bestimmten Punkt dann switch Lane
-                    CurrentLane.ID = 4;
+                    CurrentLane.ID = 2;
                     //PositionX -= Speed;
                     break;
                 case 2:
-                    CurrentLane.ID = 1;
+                    CurrentLane.ID = 3;
                     //PositionY += Speed;
                     break;
                 case 3:
@@ -181,7 +181,7 @@ namespace AmpelSimulation.Classes.Container
                     //PositionX += Speed;
                     break;
                 case 4:
-                    CurrentLane.ID = 3;
+                    CurrentLane.ID = 4;
                     //PositionY -= Speed;
                     break;
                 default:

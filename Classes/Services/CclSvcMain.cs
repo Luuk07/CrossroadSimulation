@@ -13,10 +13,12 @@ namespace AmpelSimulation.Classes.Services
         // Main service class to manage other services
         //
         private static System.Timers.Timer _timer;
-        private int counter = 0;
+        private int counterCarPlace = 0;
+        private int counterTrafficLight = 0;
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; } 
 
+        public event EventHandler E_PlaceNewCar;
         public CclSvcMain()
         {
             CrossroadHandler = new CclSvcHandleCrossroad();
@@ -28,43 +30,45 @@ namespace AmpelSimulation.Classes.Services
 
         private void MainTick(object sender, ElapsedEventArgs e)
         {
-            counter++;
+            counterCarPlace++;
+            counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
-            if (counter == 500)
+            if (counterCarPlace == 500)
             {
-                counter = 0;
+                counterCarPlace = 0;
                 CrossroadHandler.PlaceNewCar();
+                E_PlaceNewCar.Invoke(this, EventArgs.Empty);
             }
 
             //Später den Zwischenschritt mit SpeedOfChanging rausnehmen, ist eigentlich unnötig
             switch (CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging)
             {
                 case 1:
-                    if (counter == 1000)
+                    if (counterTrafficLight == 1000)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        counter = 0;
+                        counterTrafficLight = 0;
                     }
                     break;
                 case 2:
-                    if (counter == 800)
+                    if (counterTrafficLight == 800)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        counter = 0;
+                        counterTrafficLight = 0;
                     }
                     break;
                 case 3:
-                    if (counter == 600)
+                    if (counterTrafficLight == 600)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        counter = 0;
+                        counterTrafficLight = 0;
                     }
                     break;
                 case 4:
-                    if (counter == 400)
+                    if (counterTrafficLight == 400)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        counter = 0;
+                        counterTrafficLight = 0;
                     }
                     break;
                 default:

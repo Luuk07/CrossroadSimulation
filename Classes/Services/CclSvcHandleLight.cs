@@ -11,7 +11,9 @@ namespace AmpelSimulation.Classes.Services
     public class CclSvcHandleLight
     {
         public List <CclContTrafficLight> TrafficLights { get; set; } = new List<CclContTrafficLight>();
- 
+
+        public event EventHandler StateChanged;
+
         public void SyncTrafficLights(TrafficLightMode Mode)
         {
             // Sync all traffic lights in the crossroad and give them the same mode
@@ -29,10 +31,12 @@ namespace AmpelSimulation.Classes.Services
                 if (light.CurrentState == TrafficLightState.Green)
                 { 
                     light.CurrentState = TrafficLightState.Red;
+                    StateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else if (light.CurrentState == TrafficLightState.Red)
                 {
                     light.CurrentState = TrafficLightState.Green;
+                    StateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
                 {
@@ -55,6 +59,7 @@ namespace AmpelSimulation.Classes.Services
                     }
                 }
             }
+            
         }
     }
 }
