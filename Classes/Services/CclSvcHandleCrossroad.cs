@@ -23,6 +23,7 @@ namespace AmpelSimulation.Classes.Services
         public CclSvcHandleCar CarHandler { get; set; }
 
         //
+        public int SpaceBetweenCar { get; set; } = 10;
         public List<CclSvcHandleCar> l_CarHandler { get;set; } = new List<CclSvcHandleCar>();
 
         public CclSvcCreatAll Creat { get; set; } = new CclSvcCreatAll();
@@ -65,24 +66,24 @@ namespace AmpelSimulation.Classes.Services
         // Check distance between cars in the same line
         public bool IsDistanceBetweenCarInFrontEnough(CclSvcHandleCar currentCarHandler)
         {
-           foreach (var CarHandler in l_CarHandler.Where(c=> c.LaneID == currentCarHandler.LaneID))
+           foreach (var CarHandler in l_CarHandler.Where(c=> c.LaneID == currentCarHandler.LaneID && !ReferenceEquals(c, currentCarHandler)))
             {
                 switch(CarHandler.LaneID)
                 {
                     case 1:
-                        if (currentCarHandler.Car.PositionY -10 <= CarHandler.Car.PositionY)
+                        if (currentCarHandler.Car.PositionY - SpaceBetweenCar <= CarHandler.Car.PositionY)
                             return false;
                         break;
                     case 2:
-                        if (currentCarHandler.Car.PositionX -10 <= CarHandler.Car.PositionX)
+                        if (currentCarHandler.Car.PositionX - SpaceBetweenCar <= CarHandler.Car.PositionX)
                             return false;
                         break;
                     case 3:
-                        if (currentCarHandler.Car.PositionY +10 >= CarHandler.Car.PositionY)
+                        if (currentCarHandler.Car.PositionY + SpaceBetweenCar >= CarHandler.Car.PositionY)
                             return false;
                         break;
                     case 4:
-                        if (currentCarHandler.Car.PositionX +10 >= CarHandler.Car.PositionX)
+                        if (currentCarHandler.Car.PositionX + SpaceBetweenCar >= CarHandler.Car.PositionX)
                             return false;
                         break;
                 }

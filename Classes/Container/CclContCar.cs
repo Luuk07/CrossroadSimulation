@@ -13,8 +13,10 @@ namespace AmpelSimulation.Classes.Container
         private int _PositionY;
         private CclContLane _CurrentLane;
         //
-        public string Color { get; set; }
+        public int LeftTurnPoint = 40;
 
+        public int RightTurnPoint = 12;
+        public string Color { get; set; }
         public CarDirection Direction { get; set; }
         public CclContLane CurrentLane { get; set; }
         public int PS { get; set; }
@@ -68,24 +70,24 @@ namespace AmpelSimulation.Classes.Container
 
         }
 
-        public bool CarInFront(int lineID)
+        public bool IsAtTurningPointLeft(CclContTrafficLight trafficLight, int laneID)
         {
-            switch (lineID)
+            switch (laneID)
             {
                 case 1:
-                    if (PositionY == + 10)
+                    if (PositionY == trafficLight.PositionY - CurrentLane.Width * 2)
                         return true;
                     break;
                 case 2:
-                    if (PositionX == + 10)
+                    if (PositionX == trafficLight.PositionX - CurrentLane.Width * 2)
                         return true;
                     break;
                 case 3:
-                    if (PositionY == - 10)
+                    if (PositionY == trafficLight.PositionY + CurrentLane.Width * 2)
                         return true;
                     break;
                 case 4:
-                    if (PositionX ==  - 10)
+                    if (PositionX == trafficLight.PositionX + CurrentLane.Width * 2)
                         return true;
                     break;
                 default:
@@ -93,6 +95,58 @@ namespace AmpelSimulation.Classes.Container
             }
             return false;
         }
+
+        public bool IsAtTurningPointRight(CclContTrafficLight trafficLight, int laneID)
+        {
+            switch (laneID)
+            {
+                case 1:
+                    if (PositionY == trafficLight.PositionY - CurrentLane.Width)
+                        return true;
+                    break;
+                case 2:
+                    if (PositionX == trafficLight.PositionX - CurrentLane.Width)
+                        return true;
+                    break;
+                case 3:
+                    if (PositionY == trafficLight.PositionY + CurrentLane.Width)
+                        return true;
+                    break;
+                case 4:
+                    if (PositionX == trafficLight.PositionX + CurrentLane.Width)
+                        return true;
+                    break;
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        //public bool CarInFront(int lineID)
+        //{
+        //    switch (lineID)
+        //    {
+        //        case 1:
+        //            if (PositionY == + 10)
+        //                return true;
+        //            break;
+        //        case 2:
+        //            if (PositionX == + 10)
+        //                return true;
+        //            break;
+        //        case 3:
+        //            if (PositionY == - 10)
+        //                return true;
+        //            break;
+        //        case 4:
+        //            if (PositionX ==  - 10)
+        //                return true;
+        //            break;
+        //        default:
+        //            break;
+        //    }
+        //    return false;
+        //}
 
         // Methods to control the car
         public void StartOrContinueDriving(int LaneID)
@@ -141,19 +195,19 @@ namespace AmpelSimulation.Classes.Container
             switch (LaneID)
             {
                 case 1:
-                    CurrentLane.ID = 2;
+                    CurrentLane.ID = 4;
                     //PositionX += Speed;
                     break;
                 case 2:
-                    CurrentLane.ID = 3;
+                    CurrentLane.ID = 1;
                     //PositionY -= Speed;
                     break;
                 case 3:
-                    CurrentLane.ID = 4;
+                    CurrentLane.ID = 2;
                     //PositionX -= Speed;
                     break;
                 case 4:
-                    CurrentLane.ID = 1;
+                    CurrentLane.ID = 3;
                     //PositionY += Speed;
                     break;
                 default:

@@ -15,7 +15,6 @@ namespace AmpelSimulation.Classes.Services
         public CclContCar Car { get; set; }
 
         public int LaneID { get; set; }
-        public TrafficLightState State { get; set; }
         public CclContTrafficLight TrafficLight { get; set; }
 
         public CclSvcHandleCar(CclContCar car, CclContTrafficLight trafficLight)
@@ -28,20 +27,28 @@ namespace AmpelSimulation.Classes.Services
             {
                 if (Car.IsAtTrafficLight(TrafficLight, LaneID))
                 {
-                    CarBehaviorAtCrossroad();
+                    CheckTrafficLightState();
                 }
-
+                if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(TrafficLight, LaneID))
+                {
+                    SetCarDirection();
+                }
+                if (Car.Direction == CarDirection.Right && Car.IsAtTurningPointRight(TrafficLight, LaneID))
+                {
+                    SetCarDirection();
+                }
             };
+
         }
 
         public void CheckTrafficLightState()
         {
-            // Ceck the the traffic light of the current car -> handle car behavior
-            if (State == TrafficLightState.Green)
+            // Check the traffic light of the current car -> handle car behavior
+            if (TrafficLight.CurrentState == TrafficLightState.Green)
             {
                 // Car can drive
                 Car.StartOrContinueDriving(LaneID);
-                SetCarDirection();
+                //SetCarDirection();
             }
             //else if (State == TrafficLightState.Yellow)
             //{
