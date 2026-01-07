@@ -1,4 +1,5 @@
 ﻿using AmpelSimulation.Classes.Services;
+using AmpelSimulation.Classes.Tools;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -18,18 +19,17 @@ namespace AmpelSimulation
         {
             Main = new CclSvcMain();
             InitializeComponent();
-            this.Paint += Form1_Paint;
+            this.Paint += Form1_PaintCar;
+            this.Paint += Form1_PaintTrafficLight;
+            this.DoubleBuffered = true;
             Main.E_PlaceNewCar += (s, e) => this.Invalidate();
             Main.CrossroadHandler.E_MoveCar += (s, e) => this.Invalidate();
+
         }
 
-        public void Form1_Paint(object sender, PaintEventArgs e) 
+        public void Form1_PaintCar(object sender, PaintEventArgs e) 
         {
-
-           
             Graphics g = e.Graphics;
-
-
             foreach (var CarHandler in Main.CrossroadHandler.l_CarHandler)
             {
                 // Rechteck für das Auto (Breite = 20, Höhe = 10)
@@ -38,19 +38,43 @@ namespace AmpelSimulation
                     (int)CarHandler.Car.PositionY,
                     5, 5
                 );
-
-
-
                 using (Brush brush = new SolidBrush(Color.Black))
                 {
                     g.FillRectangle(brush, rect);
                 }
-
                 g.DrawRectangle(Pens.Black, rect);
-
-
             }
+        }
 
+        public void Form1_PaintTrafficLight(object sender, PaintEventArgs e)
+        {
+            Graphics g = e.Graphics;
+            foreach (var trafficLight in Main.CrossroadHandler.TrafficLights)
+            {
+                // Rechteck für die Ampel (Breite = 10, Höhe = 30)
+                Rectangle rect = new Rectangle(
+                    (int)trafficLight.PositionX,
+                    (int)trafficLight.PositionY,
+                    4, 4
+                );
+                if (trafficLight.CurrentState == TrafficLightState.Green)
+                {
+                    using (Brush brush = new SolidBrush(Color.Green))
+                    {
+                        g.FillRectangle(brush, rect);
+                    }
+                }
+                else
+                {
+                    using (Brush brush = new SolidBrush(Color.Red))
+                    {
+                        g.FillRectangle(brush, rect);
+                    }
+                }
+              
+                
+                g.DrawRectangle(Pens.Black, rect);
+            }
         }
     }
 }

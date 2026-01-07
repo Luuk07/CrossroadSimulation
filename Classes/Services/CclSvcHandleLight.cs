@@ -25,7 +25,6 @@ namespace AmpelSimulation.Classes.Services
 
         public void ChangeColorOfTrafficLight()
         {
-            
             foreach(var light in TrafficLights)
             {
                 if (light.CurrentState == TrafficLightState.Green)

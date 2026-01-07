@@ -25,26 +25,28 @@ namespace AmpelSimulation.Classes.Services
             // Check if the car is at the traffic light position
             Car.PositionChanged += (s, e) =>
             {
-                if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID))
+                if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
                 {
                     CheckTrafficLightState();
                 }
                 if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(TrafficLight, Car.CurrentLane.ID))
                 {
+                    Car.IsIgnoringTrafficLight = true;
                     SetCarDirection();
                 }
                 if (Car.Direction == CarDirection.Right && Car.IsAtTurningPointRight(TrafficLight, Car.CurrentLane.ID))
                 {
+                    Car.IsIgnoringTrafficLight = true;
                     SetCarDirection();
                 }
             };
-            //LightHandler.StateChanged += (s, e) =>
-            //{
-            //    if (Car.IsAtTrafficLight(TrafficLight, LaneID))
-            //    {
-            //        CheckTrafficLightState();
-            //    }
-            //};
+            LightHandler.StateChanged += (s, e) =>
+            {
+                if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
+                {
+                    CheckTrafficLightState();
+                }
+            };
 
         }
 
@@ -75,26 +77,23 @@ namespace AmpelSimulation.Classes.Services
                 {
                     // Turn left
                     Car.TurnLeft(Car.CurrentLane.ID);
+                    Car.Direction = CarDirection.Straight; 
                 }
                 else if (Car.Direction == CarDirection.Right)
                 {
                     // Turn right
                     Car.TurnRight(Car.CurrentLane.ID);
+                    Car.Direction = CarDirection.Straight;
                 }
                 else if (Car.Direction == CarDirection.Straight)
                 {
                     // Drive straight ahead
                     Car.StraightAhead(Car.CurrentLane.ID);
+                    
                 }
         }
 
-        // Handle car behavior at crossroad based on traffic light state
-        public void CarBehaviorAtCrossroad()
-        {
-
-            CheckTrafficLightState();
-
-        }
+        
 
 
     }

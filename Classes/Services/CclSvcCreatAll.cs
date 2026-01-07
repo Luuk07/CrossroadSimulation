@@ -32,20 +32,20 @@ namespace AmpelSimulation.Classes.Services
             switch (car.CurrentLane.ID)
             {
                 case 1:
-                    car.PositionX = 60;
+                    car.PositionX = 65;
                     car.PositionY = 100;
                     break;
                 case 2:
                     car.PositionX = 100;
-                    car.PositionY = 50;
+                    car.PositionY = 55;
                     break;
                 case 3:
-                    car.PositionX = 50;
+                    car.PositionX = 55;
                     car.PositionY = 0;
                     break;
                 default:
                     car.PositionX = 0;
-                    car.PositionY = 60;
+                    car.PositionY = 65;
                     break;
             }
             return car;

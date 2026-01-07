@@ -40,16 +40,12 @@ namespace AmpelSimulation.Classes.Services
             TrafficLights = Creat.TrafficLights;
             LightHandler.TrafficLights = TrafficLights;
             LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
-            
         }
-
-      
         //Place new car in the crossroad
         public void PlaceNewCar()
         {
             Car = Creat.CreateNewCar();
-            int laneID = CclRandom.Random.Next(1, 5);
-            var trafficLight = TrafficLights.FirstOrDefault(tl => tl.ID == laneID);
+            var trafficLight = TrafficLights.FirstOrDefault(tl => tl.ID == Car.CurrentLane.ID);
             CarHandler = new CclSvcHandleCar(Car, trafficLight, LightHandler);
             l_CarHandler.Add(CarHandler);
         }
@@ -93,11 +89,5 @@ namespace AmpelSimulation.Classes.Services
             }
             return true;
         }
-
-
-
-
-
-
     }
 }

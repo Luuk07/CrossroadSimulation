@@ -16,6 +16,8 @@ namespace AmpelSimulation.Classes.Container
         public int LeftTurnPoint = 40;
 
         public int RightTurnPoint = 12;
+
+        public bool IsIgnoringTrafficLight { get; set; } = false;
         public string Color { get; set; }
         public CarDirection Direction { get; set; }
         public CclContLane CurrentLane { get; set; }
@@ -48,19 +50,19 @@ namespace AmpelSimulation.Classes.Container
             switch (laneID)
             {
                 case 1:
-                    if (PositionY == trafficLight.PositionY +10)
+                    if (PositionY == trafficLight.PositionY +12)
                         return true;
                     break;
                 case 2:
-                    if (PositionX == trafficLight.PositionX +10)
+                    if (PositionX == trafficLight.PositionX +12)
                         return true;
                     break;
                 case 3:
-                    if (PositionY == trafficLight.PositionY -10)
+                    if (PositionY == trafficLight.PositionY -12)
                         return true;
                     break;
                 case 4:
-                    if (PositionX == trafficLight.PositionX -10)
+                    if (PositionX == trafficLight.PositionX -12)
                         return true;
                     break;
                 default:
@@ -170,18 +172,22 @@ namespace AmpelSimulation.Classes.Container
                 case 1:      
                     // Fahren bis zu einem bestimmten Punkt dann switch Lane
                     CurrentLane.ID = 2;
+                    StartOrContinueDriving(LaneID);
                     //PositionX -= Speed;
                     break;
                 case 2:
                     CurrentLane.ID = 3;
+                    StartOrContinueDriving(LaneID);
                     //PositionY += Speed;
                     break;
                 case 3:
                     CurrentLane.ID = 2;
+                    StartOrContinueDriving(LaneID);
                     //PositionX += Speed;
                     break;
                 case 4:
                     CurrentLane.ID = 4;
+                    StartOrContinueDriving(LaneID);
                     //PositionY -= Speed;
                     break;
                 default:
@@ -196,18 +202,22 @@ namespace AmpelSimulation.Classes.Container
             {
                 case 1:
                     CurrentLane.ID = 4;
+                    StartOrContinueDriving(LaneID);
                     //PositionX += Speed;
                     break;
                 case 2:
                     CurrentLane.ID = 1;
+                    StartOrContinueDriving(LaneID);
                     //PositionY -= Speed;
                     break;
                 case 3:
                     CurrentLane.ID = 2;
+                    StartOrContinueDriving(LaneID);
                     //PositionX -= Speed;
                     break;
                 case 4:
                     CurrentLane.ID = 3;
+                    StartOrContinueDriving(LaneID);
                     //PositionY += Speed;
                     break;
                 default:

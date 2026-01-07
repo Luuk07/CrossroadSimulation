@@ -35,37 +35,39 @@ namespace AmpelSimulation.Classes.Services
             CrossroadHandler.MoveCarsInCrossroad();
             if (counterCarPlace == 500)
             {
+                _timer.Stop();
                 counterCarPlace = 0;
                 CrossroadHandler.PlaceNewCar();
                 E_PlaceNewCar.Invoke(this, EventArgs.Empty);
+                _timer.Start();
             }
 
             //Später den Zwischenschritt mit SpeedOfChanging rausnehmen, ist eigentlich unnötig
             switch (CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging)
             {
                 case 1:
-                    if (counterTrafficLight == 1000)
+                    if (counterTrafficLight == 500)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
                     }
                     break;
                 case 2:
-                    if (counterTrafficLight == 800)
+                    if (counterTrafficLight == 400)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
                     }
                     break;
                 case 3:
-                    if (counterTrafficLight == 600)
+                    if (counterTrafficLight == 300)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
                     }
                     break;
                 case 4:
-                    if (counterTrafficLight == 400)
+                    if (counterTrafficLight == 200)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;

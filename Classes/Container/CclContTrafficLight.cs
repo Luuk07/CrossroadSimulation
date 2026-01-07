@@ -16,10 +16,7 @@ namespace AmpelSimulation.Classes.Container
         public CclContLane CurrentLane { get; set; }
         public int PositionX { get; set; }
         public int PositionY { get; set; }
-
         // 
-        
-
 
         public void SpeedChangeMode(TrafficLightMode mode)
         {
