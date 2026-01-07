@@ -75,16 +75,18 @@ namespace AmpelSimulation.Classes.Services
         public void SetCarDirection()
         {
             // Check the car direction and handle the car behavior
-                if (Car.Direction == CarDirection.Left)
+                if (Car.Direction == CarDirection.Left && !Car.IsAlreadyTurned)
                 {
                     // Turn left
                     Car.TurnLeft(Car.CurrentLane.ID);
+                    Car.IsAlreadyTurned = true;
                     Car.Direction = CarDirection.Straight; 
                 }
-                else if (Car.Direction == CarDirection.Right)
+                else if (Car.Direction == CarDirection.Right && !Car.IsAlreadyTurned)
                 {
                     // Turn right
                     Car.TurnRight(Car.CurrentLane.ID);
+                    Car.IsAlreadyTurned = true;
                     Car.Direction = CarDirection.Straight;
                 }
                 else if (Car.Direction == CarDirection.Straight)

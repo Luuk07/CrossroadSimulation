@@ -21,11 +21,18 @@ namespace AmpelSimulation.Classes.Services
         public event EventHandler E_PlaceNewCar;
         public CclSvcMain()
         {
-            CrossroadHandler = new CclSvcHandleCrossroad();
-            _timer = new System.Timers.Timer(10);
-            _timer.Elapsed += MainTick;
-            _timer.AutoReset = true;
-            _timer.Enabled = true;
+            try
+            {
+                CrossroadHandler = new CclSvcHandleCrossroad();
+                _timer = new System.Timers.Timer(10);
+                _timer.Elapsed += MainTick;
+                _timer.AutoReset = true;
+                _timer.Enabled = false;
+            }
+            finally
+            {
+                _timer.Enabled = true;
+            }
         }
 
         private void MainTick(object sender, ElapsedEventArgs e)
@@ -33,7 +40,7 @@ namespace AmpelSimulation.Classes.Services
             counterCarPlace++;
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
-            if (counterCarPlace == 300)
+            if (counterCarPlace == 200)
             {
                 _timer.Stop();
                 counterCarPlace = 0;

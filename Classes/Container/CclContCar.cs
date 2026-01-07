@@ -18,6 +18,8 @@ namespace AmpelSimulation.Classes.Container
         public int RightTurnPoint = 12;
 
         public bool IsIgnoringTrafficLight { get; set; } = false;
+
+        public bool IsAlreadyTurned { get; set; } = false;
         public string Color { get; set; }
         public CarDirection Direction { get; set; }
         public CclContLane CurrentLane { get; set; }
@@ -77,19 +79,19 @@ namespace AmpelSimulation.Classes.Container
             switch (laneID)
             {
                 case 1:
-                    if (PositionY == trafficLight.PositionY - CurrentLane.Width * 2)
+                    if (PositionY == trafficLight.PositionY - CurrentLane.Width * 1.5)
                         return true;
                     break;
                 case 2:
-                    if (PositionX == trafficLight.PositionX - CurrentLane.Width * 2)
+                    if (PositionX == trafficLight.PositionX - CurrentLane.Width * 1.5)
                         return true;
                     break;
                 case 3:
-                    if (PositionY == trafficLight.PositionY + CurrentLane.Width * 2)
+                    if (PositionY == trafficLight.PositionY + CurrentLane.Width * 1.5)
                         return true;
                     break;
                 case 4:
-                    if (PositionX == trafficLight.PositionX + CurrentLane.Width * 2)
+                    if (PositionX == trafficLight.PositionX + CurrentLane.Width * 1.5)
                         return true;
                     break;
                 default:
@@ -103,19 +105,19 @@ namespace AmpelSimulation.Classes.Container
             switch (laneID)
             {
                 case 1:
-                    if (PositionY == trafficLight.PositionY - CurrentLane.Width)
+                    if (PositionY == trafficLight.PositionY - CurrentLane.Width/2)
                         return true;
                     break;
                 case 2:
-                    if (PositionX == trafficLight.PositionX - CurrentLane.Width)
+                    if (PositionX == trafficLight.PositionX - CurrentLane.Width/2)
                         return true;
                     break;
                 case 3:
-                    if (PositionY == trafficLight.PositionY + CurrentLane.Width)
+                    if (PositionY == trafficLight.PositionY + CurrentLane.Width/2)
                         return true;
                     break;
                 case 4:
-                    if (PositionX == trafficLight.PositionX + CurrentLane.Width)
+                    if (PositionX == trafficLight.PositionX + CurrentLane.Width/2)
                         return true;
                     break;
                 default:
