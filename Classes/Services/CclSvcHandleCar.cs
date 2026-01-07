@@ -17,6 +17,8 @@ namespace AmpelSimulation.Classes.Services
 
         public CclSvcHandleLight LightHandler { get; set; }
 
+     
+
         public CclSvcHandleCar(CclContCar car, CclContTrafficLight trafficLight, CclSvcHandleLight lightHandler)
         {
             Car = car;

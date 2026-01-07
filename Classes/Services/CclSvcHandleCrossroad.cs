@@ -60,6 +60,7 @@ namespace AmpelSimulation.Classes.Services
                     carHandler.Car.StraightAhead(carHandler.Car.CurrentLane.ID);
                     E_MoveCar?.Invoke(this, EventArgs.Empty);
                 }
+                var a = IsDistanceBetweenCarInFrontEnough(carHandler);
             }
         }
         // Check distance between cars in the same line
@@ -89,5 +90,65 @@ namespace AmpelSimulation.Classes.Services
             }
             return true;
         }
+
+
+        public bool IsDistanceBetweenCarInFrontEnough2(CclSvcHandleCar currentCarHandler)
+        {
+            CclSvcHandleCar ahead = null;
+            int laneId = currentCarHandler.Car.CurrentLane.ID;
+
+            foreach (var c in l_CarHandler)
+            {
+                if (ReferenceEquals(c, currentCarHandler) || c.Car.CurrentLane.ID != laneId) continue;
+
+                switch (laneId)
+                {
+                    case 1: // nach oben
+                        if (c.Car.PositionY < currentCarHandler.Car.PositionY &&
+                            (ahead == null || c.Car.PositionY > ahead.Car.PositionY))
+                            ahead = c;
+                        break;
+
+                    case 2: // nach rechts
+                        if (c.Car.PositionX > currentCarHandler.Car.PositionX &&
+                            (ahead == null || c.Car.PositionX < ahead.Car.PositionX))
+                            ahead = c;
+                        break;
+
+                    case 3: // nach unten
+                        if (c.Car.PositionY > currentCarHandler.Car.PositionY &&
+                            (ahead == null || c.Car.PositionY < ahead.Car.PositionY))
+                            ahead = c;
+                        break;
+
+                    case 4: // nach links
+                        if (c.Car.PositionX < currentCarHandler.Car.PositionX &&
+                            (ahead == null || c.Car.PositionX > ahead.Car.PositionX))
+                            ahead = c;
+                        break;
+                }
+            }
+
+            if (ahead == null) return true;
+
+            double gap = 0;
+            switch (laneId)
+            {
+                case 1: gap = currentCarHandler.Car.PositionY - ahead.Car.PositionY; break;
+                case 2: gap = ahead.Car.PositionX - currentCarHandler.Car.PositionX; break;
+                case 3: gap = ahead.Car.PositionY - currentCarHandler.Car.PositionY; break;
+                case 4: gap = currentCarHandler.Car.PositionX - ahead.Car.PositionX; break;
+            }
+
+            return gap >= SpaceBetweenCar;
+        }
+
+
+        public void RemoveCarFromCrossroad(CclSvcHandleCar carHandler)
+        {
+            // Autos ausm die ausm Bild sind entfernen
+        }
+
+
     }
 }

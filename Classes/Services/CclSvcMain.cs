@@ -33,7 +33,7 @@ namespace AmpelSimulation.Classes.Services
             counterCarPlace++;
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
-            if (counterCarPlace == 500)
+            if (counterCarPlace == 300)
             {
                 _timer.Stop();
                 counterCarPlace = 0;
@@ -46,7 +46,7 @@ namespace AmpelSimulation.Classes.Services
             switch (CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging)
             {
                 case 1:
-                    if (counterTrafficLight == 500)
+                    if (counterTrafficLight == 700)
                     {
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;

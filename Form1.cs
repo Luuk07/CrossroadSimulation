@@ -15,6 +15,8 @@ namespace AmpelSimulation
     public partial class Form1 : Form
     {
         public CclSvcMain Main { get; set; }
+
+        public int scaleFactor = 5;
         public Form1()
         {
             Main = new CclSvcMain();
@@ -34,9 +36,9 @@ namespace AmpelSimulation
             {
                 // Rechteck für das Auto (Breite = 20, Höhe = 10)
                 Rectangle rect = new Rectangle(
-                    (int)CarHandler.Car.PositionX,
-                    (int)CarHandler.Car.PositionY,
-                    5, 5
+                    (int)CarHandler.Car.PositionX * scaleFactor,
+                    (int)CarHandler.Car.PositionY * scaleFactor,
+                    5 * scaleFactor / 2, 5 * scaleFactor / 2
                 );
                 using (Brush brush = new SolidBrush(Color.Black))
                 {
@@ -53,9 +55,9 @@ namespace AmpelSimulation
             {
                 // Rechteck für die Ampel (Breite = 10, Höhe = 30)
                 Rectangle rect = new Rectangle(
-                    (int)trafficLight.PositionX,
-                    (int)trafficLight.PositionY,
-                    4, 4
+                    (int)trafficLight.PositionX * scaleFactor,
+                    (int)trafficLight.PositionY * scaleFactor,
+                    4 * scaleFactor/2, 4 * scaleFactor/2
                 );
                 if (trafficLight.CurrentState == TrafficLightState.Green)
                 {
