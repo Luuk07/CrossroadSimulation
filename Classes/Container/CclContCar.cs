@@ -24,7 +24,7 @@ namespace AmpelSimulation.Classes.Container
         public CarDirection Direction { get; set; }
         public CclContLane CurrentLane { get; set; }
         public int PS { get; set; }
-        public Func<int, CclContLane> ResolveLaneById { get; set; } // <-- hier der Resolver
+        public Func<int, CclContLane> ResolveLaneById { get; set; } 
         public double Weight { get; set; }
 
         public double PositionX
@@ -184,19 +184,19 @@ namespace AmpelSimulation.Classes.Container
                     break;
                 case 2:
                     //CurrentLane.ID = 1;
-                    CurrentLane = ResolveLaneById(3); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(3); 
                     StartOrContinueDriving(LaneID);
                     //PositionY += Speed;
                     break;
                 case 3:
                     //CurrentLane.ID = 2;
-                    CurrentLane = ResolveLaneById(4); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(4); 
                     StartOrContinueDriving(LaneID);
                     //PositionX += Speed;
                     break;
                 case 4:
                     //CurrentLane.ID = 3;
-                    CurrentLane = ResolveLaneById(1); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(1); 
                     StartOrContinueDriving(LaneID);
                     //PositionY -= Speed;
                     break;
@@ -212,25 +212,25 @@ namespace AmpelSimulation.Classes.Container
             {
                 case 1:
                     //CurrentLane.ID = 2;
-                    CurrentLane = ResolveLaneById(4); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(4); 
                     StartOrContinueDriving(LaneID);
                     //PositionX += Speed;
                     break;
                 case 2:
                     //CurrentLane.ID = 3;
-                    CurrentLane = ResolveLaneById(1); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(1); 
                     StartOrContinueDriving(LaneID);
                     //PositionY -= Speed;
                     break;
                 case 3:
                     //CurrentLane.ID = 4;
-                    CurrentLane = ResolveLaneById(2); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(2); 
                     StartOrContinueDriving(LaneID);
                     //PositionX -= Speed;
                     break;
                 case 4:
                     //CurrentLane.ID = 1;
-                    CurrentLane = ResolveLaneById(3); // wechselt NUR die Lane-Referenz des Autos
+                    CurrentLane = ResolveLaneById(3); 
                     StartOrContinueDriving(LaneID);
                     //PositionY += Speed;
                     break;

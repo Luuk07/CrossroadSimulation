@@ -18,6 +18,7 @@ namespace AmpelSimulation.Classes.Services
         //Handle crossroad logic here
         
         //
+
         public List <CclContTrafficLight> TrafficLights { get; set; }
         public List <CclContLane> Lanes { get; set; }
         public CclContCar Car { get; set; } 
@@ -29,6 +30,8 @@ namespace AmpelSimulation.Classes.Services
         public CclSvcCreatAll Creat { get; set; } = new CclSvcCreatAll();
       
         public CclSvcHandleLight LightHandler { get; set; } = new CclSvcHandleLight();
+
+        public CclContStatistic Statistic { get; set; } = new CclContStatistic();
         //
         public event EventHandler E_MoveCar;
 
@@ -198,15 +201,20 @@ namespace AmpelSimulation.Classes.Services
 
         public void RemoveCarFromCrossroad()
         {
-            foreach (var carHandler in l_CarHandler)
+           E_MoveCar += (s, e) =>
             {
-                if ((carHandler.Car.PositionX < -100|| carHandler.Car.PositionX>1000) || (carHandler.Car.PositionY < -100 || carHandler.Car.PositionY >1000))
+                foreach (var carHandler in l_CarHandler)
                 {
-                    l_CarHandler.Remove(carHandler);
-                    Lanes.FirstOrDefault(l => l.ID == carHandler.Car.CurrentLane.ID).CarsInLane.Remove(carHandler);
+                    if ((carHandler.Car.PositionX < -100|| carHandler.Car.PositionX>100) || (carHandler.Car.PositionY < -100 || carHandler.Car.PositionY >100))
+                    {
+                        l_CarHandler.Remove(carHandler);
+                        Lanes.FirstOrDefault(l => l.ID == carHandler.Car.CurrentLane.ID).CarsInLane.Remove(carHandler);
+                        Statistic.TotalCarsPassed += 1;
 
+                    }
                 }
-            }
+                
+            };
         }
 
 

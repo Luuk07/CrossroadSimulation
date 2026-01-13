@@ -26,6 +26,7 @@ namespace AmpelSimulation
             this.DoubleBuffered = true;
             Main.E_PlaceNewCar += (s, e) => this.Invalidate();
             Main.CrossroadHandler.E_MoveCar += (s, e) => this.Invalidate();
+            labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
 
         }
 
@@ -46,6 +47,7 @@ namespace AmpelSimulation
                 }
                 g.DrawRectangle(Pens.Black, rect);
             }
+            labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
         }
 
         public void Form1_PaintTrafficLight(object sender, PaintEventArgs e)
