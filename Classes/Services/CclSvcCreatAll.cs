@@ -18,6 +18,7 @@ namespace AmpelSimulation.Classes.Services
             "Gelb","Schwarz", "Weiß", "Pink", "Lila", 
         };
 
+        private CclContLane GetLaneById(int id) => l_AllLane.First(l => l.ID == id);
         public CclContCar CreateNewCar()
         {
             // Create car logic here
@@ -29,6 +30,7 @@ namespace AmpelSimulation.Classes.Services
                 CurrentLane = l_AllLane[CclRandom.Random.Next(l_AllLane.Count)],  
                 Direction = (CarDirection)CclRandom.Random.Next(1, 4),
             };
+            car.ResolveLaneById = GetLaneById;
             switch (car.CurrentLane.ID)
             {
                 case 1:

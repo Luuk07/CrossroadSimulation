@@ -55,29 +55,33 @@ namespace AmpelSimulation.Classes.Services
                 case 1:
                     if (counterTrafficLight == 700)
                     {
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
+                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 case 2:
                     if (counterTrafficLight == 400)
                     {
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
+                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 case 3:
                     if (counterTrafficLight == 300)
                     {
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
+                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 case 4:
                     if (counterTrafficLight == 200)
                     {
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         counterTrafficLight = 0;
+                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 default:

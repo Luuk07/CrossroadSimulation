@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -14,51 +15,49 @@ namespace AmpelSimulation.Classes.Services
     {
         public CclContCar Car { get; set; }
         public CclContTrafficLight TrafficLight { get; set; }
-
         public CclSvcHandleLight LightHandler { get; set; }
-
-     
 
         public CclSvcHandleCar(CclContCar car, CclContTrafficLight trafficLight, CclSvcHandleLight lightHandler)
         {
             Car = car;
             TrafficLight = trafficLight;
             LightHandler = lightHandler;
-            // Check if the car is at the traffic light position
+            if (!ReferenceEquals(car, Car)) return; // optional: nur das Service-Auto behandeln
             Car.PositionChanged += (s, e) =>
             {
+                // Check if the car is at the traffic light position
                 if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
                 {
-                    CheckTrafficLightState();
+                    CheckTrafficLightState(car);
                 }
-                if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(TrafficLight, Car.CurrentLane.ID))
+                else if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(Car, TrafficLight, Car.CurrentLane.ID))
+                { 
+                    Car.IsIgnoringTrafficLight = true; 
+                    SetCarDirection(Car);
+                }
+                else if (Car.Direction == CarDirection.Right && Car.IsAtTurningPointRight(Car, TrafficLight, Car.CurrentLane.ID))
                 {
                     Car.IsIgnoringTrafficLight = true;
-                    SetCarDirection();
-                }
-                if (Car.Direction == CarDirection.Right && Car.IsAtTurningPointRight(TrafficLight, Car.CurrentLane.ID))
-                {
-                    Car.IsIgnoringTrafficLight = true;
-                    SetCarDirection();
+                    SetCarDirection(Car);
                 }
             };
             LightHandler.StateChanged += (s, e) =>
             {
                 if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
                 {
-                    CheckTrafficLightState();
+                    CheckTrafficLightState(car);
                 }
             };
 
         }
 
-        public void CheckTrafficLightState()
+        public void CheckTrafficLightState(CclContCar car)
         {
             // Check the traffic light of the current car -> handle car behavior
             if (TrafficLight.CurrentState == TrafficLightState.Green)
             {
                 // Car can drive
-                Car.StartOrContinueDriving(Car.CurrentLane.ID);
+                car.StartOrContinueDriving(car.CurrentLane.ID);
                 //SetCarDirection();
             }
             //else if (State == TrafficLightState.Yellow)
@@ -68,37 +67,34 @@ namespace AmpelSimulation.Classes.Services
             else 
             {
                 // Car has to stop
-                Car.Stop(Car.CurrentLane.ID);
+                car.Stop(car.CurrentLane.ID);
             }
         }
 
-        public void SetCarDirection()
+        public void SetCarDirection(CclContCar car)
         {
             // Check the car direction and handle the car behavior
-                if (Car.Direction == CarDirection.Left && !Car.IsAlreadyTurned)
+                if (car.Direction == CarDirection.Left && !car.IsAlreadyTurned)
                 {
                     // Turn left
-                    Car.TurnLeft(Car.CurrentLane.ID);
-                    Car.IsAlreadyTurned = true;
-                    Car.Direction = CarDirection.Straight; 
+                    car.TurnLeft(car.CurrentLane.ID);
+                    car.IsAlreadyTurned = true;
+                    car.Direction = CarDirection.Straight; 
                 }
-                else if (Car.Direction == CarDirection.Right && !Car.IsAlreadyTurned)
+                else if (car.Direction == CarDirection.Right && !car.IsAlreadyTurned)
                 {
                     // Turn right
-                    Car.TurnRight(Car.CurrentLane.ID);
-                    Car.IsAlreadyTurned = true;
-                    Car.Direction = CarDirection.Straight;
+                    car.TurnRight(car.CurrentLane.ID);
+                    car.IsAlreadyTurned = true;
+                    car.Direction = CarDirection.Straight;
                 }
-                else if (Car.Direction == CarDirection.Straight)
+                else if (car.Direction == CarDirection.Straight)
                 {
                     // Drive straight ahead
-                    Car.StraightAhead(Car.CurrentLane.ID);
+                    car.StraightAhead(car.CurrentLane.ID);
                     
                 }
+
         }
-
-        
-
-
     }
 }

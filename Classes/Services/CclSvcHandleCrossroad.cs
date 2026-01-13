@@ -3,6 +3,7 @@ using AmpelSimulation.Classes.Tools;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,7 +22,6 @@ namespace AmpelSimulation.Classes.Services
         public List <CclContLane> Lanes { get; set; }
         public CclContCar Car { get; set; } 
         public CclSvcHandleCar CarHandler { get; set; }
-
         //
         public int SpaceBetweenCar { get; set; } = 10;
         public List<CclSvcHandleCar> l_CarHandler { get;set; } = new List<CclSvcHandleCar>();
@@ -46,8 +46,11 @@ namespace AmpelSimulation.Classes.Services
         {
             Car = Creat.CreateNewCar();
             var trafficLight = TrafficLights.FirstOrDefault(tl => tl.ID == Car.CurrentLane.ID);
+            var lane = Lanes.FirstOrDefault(l => l.ID == Car.CurrentLane.ID);
             CarHandler = new CclSvcHandleCar(Car, trafficLight, LightHandler);
+            lane.CarsInLane.Add(CarHandler);
             l_CarHandler.Add(CarHandler);
+         
         }
         // Move cars in the crossroad
         public void MoveCarsInCrossroad()
@@ -58,9 +61,10 @@ namespace AmpelSimulation.Classes.Services
                 if(IsDistanceBetweenCarInFrontEnough(carHandler))
                 {
                     carHandler.Car.StraightAhead(carHandler.Car.CurrentLane.ID);
-                    RemoveCarFromCrossroad();
+                    //RemoveCarFromCrossroad();
                     E_MoveCar?.Invoke(this, EventArgs.Empty);
                 }
+                
                 var a = IsDistanceBetweenCarInFrontEnough(carHandler);
             }
         }
@@ -196,9 +200,11 @@ namespace AmpelSimulation.Classes.Services
         {
             foreach (var carHandler in l_CarHandler)
             {
-                if ((carHandler.Car.PositionX <0|| carHandler.Car.PositionX>1000) || (carHandler.Car.PositionY <0 || carHandler.Car.PositionY >1000))
+                if ((carHandler.Car.PositionX < -100|| carHandler.Car.PositionX>1000) || (carHandler.Car.PositionY < -100 || carHandler.Car.PositionY >1000))
                 {
                     l_CarHandler.Remove(carHandler);
+                    Lanes.FirstOrDefault(l => l.ID == carHandler.Car.CurrentLane.ID).CarsInLane.Remove(carHandler);
+
                 }
             }
         }

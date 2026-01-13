@@ -24,7 +24,9 @@ namespace AmpelSimulation.Classes.Container
         public CarDirection Direction { get; set; }
         public CclContLane CurrentLane { get; set; }
         public int PS { get; set; }
+        public Func<int, CclContLane> ResolveLaneById { get; set; } // <-- hier der Resolver
         public double Weight { get; set; }
+
         public double PositionX
         {
             get;
@@ -74,24 +76,25 @@ namespace AmpelSimulation.Classes.Container
 
         }
 
-        public bool IsAtTurningPointLeft(CclContTrafficLight trafficLight, int laneID)
+        public bool IsAtTurningPointLeft(CclContCar car, CclContTrafficLight trafficLight, int laneID)
         {
+            var currentlaneWidth = car.CurrentLane.Width;   // Sicherstellen, dass die Lane vom *car* ist
             switch (laneID)
             {
                 case 1:
-                    if (PositionY == trafficLight.PositionY - CurrentLane.Width * 1.5)
+                    if (car.PositionY == trafficLight.PositionY - currentlaneWidth * 1.5)
                         return true;
                     break;
                 case 2:
-                    if (PositionX == trafficLight.PositionX - CurrentLane.Width * 1.5)
+                    if (car.PositionX == trafficLight.PositionX - currentlaneWidth * 1.5)
                         return true;
                     break;
                 case 3:
-                    if (PositionY == trafficLight.PositionY + CurrentLane.Width * 1.5)
+                    if (car.PositionY == trafficLight.PositionY + currentlaneWidth * 1.5)
                         return true;
                     break;
                 case 4:
-                    if (PositionX == trafficLight.PositionX + CurrentLane.Width * 1.5)
+                    if (car.PositionX == trafficLight.PositionX + currentlaneWidth * 1.5)
                         return true;
                     break;
                 default:
@@ -100,24 +103,25 @@ namespace AmpelSimulation.Classes.Container
             return false;
         }
 
-        public bool IsAtTurningPointRight(CclContTrafficLight trafficLight, int laneID)
+        public bool IsAtTurningPointRight(CclContCar car, CclContTrafficLight trafficLight, int laneID)
         {
+            var currentlaneWidth = car.CurrentLane.Width;
             switch (laneID)
             {
                 case 1:
-                    if (PositionY == trafficLight.PositionY - CurrentLane.Width/2)
+                    if (car.PositionY == trafficLight.PositionY - currentlaneWidth / 2)
                         return true;
                     break;
                 case 2:
-                    if (PositionX == trafficLight.PositionX - CurrentLane.Width/2)
+                    if (car.PositionX == trafficLight.PositionX - currentlaneWidth / 2)
                         return true;
                     break;
                 case 3:
-                    if (PositionY == trafficLight.PositionY + CurrentLane.Width/2)
+                    if (car.PositionY == trafficLight.PositionY + currentlaneWidth / 2)
                         return true;
                     break;
                 case 4:
-                    if (PositionX == trafficLight.PositionX + CurrentLane.Width/2)
+                    if (car.PositionX == trafficLight.PositionX + currentlaneWidth / 2)
                         return true;
                     break;
                 default:
@@ -173,22 +177,26 @@ namespace AmpelSimulation.Classes.Container
             {
                 case 1:      
                     // Fahren bis zu einem bestimmten Punkt dann switch Lane
-                    CurrentLane.ID = 2;
+                   // CurrentLane.ID = 4;
+                    CurrentLane = ResolveLaneById(2); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionX -= Speed;
                     break;
                 case 2:
-                    CurrentLane.ID = 3;
+                    //CurrentLane.ID = 1;
+                    CurrentLane = ResolveLaneById(3); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionY += Speed;
                     break;
                 case 3:
-                    CurrentLane.ID = 2;
+                    //CurrentLane.ID = 2;
+                    CurrentLane = ResolveLaneById(4); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionX += Speed;
                     break;
                 case 4:
-                    CurrentLane.ID = 4;
+                    //CurrentLane.ID = 3;
+                    CurrentLane = ResolveLaneById(1); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionY -= Speed;
                     break;
@@ -203,22 +211,26 @@ namespace AmpelSimulation.Classes.Container
             switch (LaneID)
             {
                 case 1:
-                    CurrentLane.ID = 4;
+                    //CurrentLane.ID = 2;
+                    CurrentLane = ResolveLaneById(4); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionX += Speed;
                     break;
                 case 2:
-                    CurrentLane.ID = 1;
+                    //CurrentLane.ID = 3;
+                    CurrentLane = ResolveLaneById(1); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionY -= Speed;
                     break;
                 case 3:
-                    CurrentLane.ID = 2;
+                    //CurrentLane.ID = 4;
+                    CurrentLane = ResolveLaneById(2); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionX -= Speed;
                     break;
                 case 4:
-                    CurrentLane.ID = 3;
+                    //CurrentLane.ID = 1;
+                    CurrentLane = ResolveLaneById(3); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
                     //PositionY += Speed;
                     break;

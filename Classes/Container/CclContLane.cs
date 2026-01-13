@@ -1,4 +1,5 @@
-﻿using System;
+﻿using AmpelSimulation.Classes.Services;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,7 +12,7 @@ namespace AmpelSimulation.Classes.Container
         public int ID { get; set; }
 
         public int Width { get; set; } = 10;
-        public List<CclContCar> CarsInLane { get; set;  } = new List<CclContCar>();
+        public List<CclSvcHandleCar> CarsInLane { get; set;  } = new List<CclSvcHandleCar>();
        
     }
 }
