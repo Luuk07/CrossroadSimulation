@@ -55,6 +55,7 @@ namespace AmpelSimulation.Classes.Services
             var lane = Lanes.FirstOrDefault(l => l.ID == Car.CurrentLane.ID);    
             CarHandler = new CclSvcHandleCar(Car, trafficLight, LightHandler, l_CarHandler);
             lane.CarsInLane.Add(CarHandler);
+            lane.LaneCountChanged();
             l_CarHandler.Add(CarHandler);
         }
         // Move cars in the crossroad
@@ -68,8 +69,7 @@ namespace AmpelSimulation.Classes.Services
                     //if (!carHandler.Car.IsAtTurningPointLeft(carHandler.Car, carHandler.TrafficLight, carHandler.Car.CurrentLane.ID))
                     //{
                         carHandler.Car.StraightAhead(carHandler.Car.CurrentLane.ID);
-                    //    //RemoveCarFromCrossroad();
-
+                        //RemoveCarFromCrossroad();
                         E_MoveCar?.Invoke(this, EventArgs.Empty);
                     //}
                 }

@@ -9,10 +9,18 @@ namespace AmpelSimulation.Classes.Container
 {
     public class CclContLane
     {
+        public event EventHandler E_LaneCountChanged;
+        //
         public int ID { get; set; }
 
         public int Width { get; set; } = 10;
-        public List<CclSvcHandleCar> CarsInLane { get; set;  } = new List<CclSvcHandleCar>();
-       
+        public List<CclSvcHandleCar> CarsInLane { get; set;} = new List<CclSvcHandleCar>();
+
+
+        public void LaneCountChanged()
+        {
+            E_LaneCountChanged?.Invoke(this, EventArgs.Empty);
+        }
+
     }
 }

@@ -37,7 +37,7 @@ namespace AmpelSimulation.Classes.Services
             {
                 if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
                 {
-                    CheckTrafficLightState(car);
+                    CheckTrafficLightState();
                 }
                 else
                 {
@@ -45,10 +45,14 @@ namespace AmpelSimulation.Classes.Services
                 }
                 
             };
-
+            // Klappt noch nicht so ganz, ich finde aber kein Event, welches auslöst, wenn das Auto fahren könnte
+            Car.CurrentLane.E_LaneCountChanged += (s, e) =>
+            {
+                PoitionChangedLogik(carHandlers);
+            };
         }
 
-
+       
         public void PoitionChangedLogik(List<CclSvcHandleCar> carHandlers)
         {
             Rec = new Rectangle((int)Car.PositionX, (int)Car.PositionY, 10, 10);
@@ -56,7 +60,7 @@ namespace AmpelSimulation.Classes.Services
             // Check if the car is at the traffic light position
             if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
             {
-                CheckTrafficLightState(Car);
+                CheckTrafficLightState();
             }
             else if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(Car, TrafficLight, Car.CurrentLane.ID))
             {
@@ -64,162 +68,161 @@ namespace AmpelSimulation.Classes.Services
                 {
                     Car.IsIgnoringTrafficLight = true;
                     Car.IsDriving = true;
-                    SetCarDirection(Car);
+                    SetCarDirection();
                 }
+                // Car has to stop if another car is in the turning area
                 else
                 {
-                    Car.Stop(Car.CurrentLane.ID); // Car has to stop if another car is in the turning area
+                    Car.Stop(Car.CurrentLane.ID); 
                     Car.IsDriving = false;
-                    ChangeDirectionToStraightAfterDelay(Car, carHandlers); // Fährt  geradeaus weiter, falls er nach 3 Sekunden nicht abbiegen kann
+                    ChangeDirectionToStraightAfterDelay(carHandlers); 
                 }
 
             }
             else if (Car.Direction == CarDirection.Right && Car.IsAtTurningPointRight(Car, TrafficLight, Car.CurrentLane.ID))
             {
                 Car.IsIgnoringTrafficLight = true;
-                SetCarDirection(Car);
+                SetCarDirection();
             }
         }
 
-
-        public async Task ChangeDirectionToStraightAfterDelay(CclContCar car, List<CclSvcHandleCar> carHandlers)
+        // Drive straight after delay
+        public async Task ChangeDirectionToStraightAfterDelay(List<CclSvcHandleCar> carHandlers)
         {
             await Task.Delay(3000); // 3 Sekunden warten
 
             Car.IsDriving = true;
-            car.Direction = CarDirection.Straight;
-            SetCarDirection(car);
-            car.StartOrContinueDriving(car.CurrentLane.ID);
+            Car.Direction = CarDirection.Straight;
+            SetCarDirection();
+            Car.StartOrContinueDriving(Car.CurrentLane.ID);
         }
 
-        public void CheckTrafficLightState(CclContCar car)
+        public void CheckTrafficLightState()
         {
             // Check the traffic light of the current car -> handle car behavior
             if (TrafficLight.CurrentState == TrafficLightState.Green)
             {
                 // Car can drive
-                car.IsDriving = true;
-                car.StartOrContinueDriving(car.CurrentLane.ID);
+                Car.IsDriving = true;
+                Car.StartOrContinueDriving(Car.CurrentLane.ID);
                 //SetCarDirection();
             }
             else
             {
                 // Car has to stop
-                car.IsDriving = false;
-                car.Stop(car.CurrentLane.ID);
+                Car.IsDriving = false;
+                Car.Stop(Car.CurrentLane.ID);
             }
         }
 
-        public void SetCarDirection(CclContCar car)
+        public void SetCarDirection()
         {
             // Check the car direction and handle the car behavior
-            if (car.Direction == CarDirection.Left && !car.IsAlreadyTurned)
+            if (Car.Direction == CarDirection.Left && !Car.IsAlreadyTurned)
             {
                 // Turn left
-                car.TurnLeft(car.CurrentLane.ID);
-                car.IsAlreadyTurned = true;
-                car.Direction = CarDirection.Straight;
+                Car.TurnLeft(Car.CurrentLane.ID);
+                Car.IsAlreadyTurned = true;
+                Car.Direction = CarDirection.Straight;
             }
-            else if (car.Direction == CarDirection.Right && !car.IsAlreadyTurned)
+            else if (Car.Direction == CarDirection.Right && !Car.IsAlreadyTurned)
             {
                 // Turn right
-                car.TurnRight(car.CurrentLane.ID);
-                car.IsAlreadyTurned = true;
-                car.Direction = CarDirection.Straight;
+                Car.TurnRight(Car.CurrentLane.ID);
+                Car.IsAlreadyTurned = true;
+                Car.Direction = CarDirection.Straight;
             }
-            else if (car.Direction == CarDirection.Straight)
+            else if (Car.Direction == CarDirection.Straight)
             {
                 // Drive straight ahead
-                car.StraightAhead(car.CurrentLane.ID);
+                Car.StraightAhead(Car.CurrentLane.ID);
 
             }
 
         }
-        public bool CheckIfCarCanDriveAtTurningPoint2(Rectangle rec, List<CclSvcHandleCar> carHandler)
+        //public bool CheckIfCarCanDriveAtTurningPoint2(Rectangle rec, List<CclSvcHandleCar> carHandler)
+        //{
+        //    foreach (var currentCarHandler in carHandler)
+        //    {
+        //        int laneID = currentCarHandler.Car.CurrentLane.ID;
+        //        switch (laneID)
+        //        {
+        //            case 1:
+        //                if (rec.Contains((int)currentCarHandler.Car.PositionX, (int)currentCarHandler.Car.PositionY - 10))
+        //                {
+        //                    return false;
+        //                }
+        //                break;
+        //            case 2:
+        //                if (rec.Contains((int)currentCarHandler.Car.PositionX - 10, (int)currentCarHandler.Car.PositionY))
+        //                {
+        //                    return false;
+        //                }
+        //                break;
+        //            case 3:
+        //                if (rec.Contains((int)currentCarHandler.Car.PositionX, (int)currentCarHandler.Car.PositionY + 10))
+        //                {
+        //                    return false;
+        //                }
+        //                break;
+        //            case 4:
+        //                if (rec.Contains((int)currentCarHandler.Car.PositionX + 10, (int)currentCarHandler.Car.PositionY))
+        //                {
+        //                    return false;
+        //                }
+        //                break;
+        //            default:
+        //                break;
+        //        }
+        //    }
+        //    return true;
+
+        //}
+
+
+
+
+
+        public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> carHandlers)
         {
-            foreach (var currentCarHandler in carHandler)
+            // Size of the car
+            const int size = 2;   
+            
+            // Checking area in front of the car
+            const int forward = 10;   
+            const int right = 10;     
+
+            foreach (var handler in carHandlers)
             {
-                int laneID = currentCarHandler.Car.CurrentLane.ID;
-                switch (laneID)
-                {
-                    case 1:
-                        if (rec.Contains((int)currentCarHandler.Car.PositionX, (int)currentCarHandler.Car.PositionY - 10))
-                        {
-                            return false;
-                        }
-                        break;
-                    case 2:
-                        if (rec.Contains((int)currentCarHandler.Car.PositionX - 10, (int)currentCarHandler.Car.PositionY))
-                        {
-                            return false;
-                        }
-                        break;
-                    case 3:
-                        if (rec.Contains((int)currentCarHandler.Car.PositionX, (int)currentCarHandler.Car.PositionY + 10))
-                        {
-                            return false;
-                        }
-                        break;
-                    case 4:
-                        if (rec.Contains((int)currentCarHandler.Car.PositionX + 10, (int)currentCarHandler.Car.PositionY))
-                        {
-                            return false;
-                        }
-                        break;
-                    default:
-                        break;
-                }
-            }
-            return true;
-
-        }
-
-
-
-
-
-        public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> cars)
-        {
-            const int size = 2;      // Auto hat Größe 10x10
-            const int forward = 10;   // 10px nach vorne checken
-            const int right = 10;     // 3px rechts checken
-
-            foreach (var handler in cars)
-            {
-                // Das Auto, das gerade betrachtet wird
-                var car = handler.Car;
-
-                // Skip: nicht gegen sich selbst prüfen
-                if ((int)car.PositionX == rec.X && (int)car.PositionY == rec.Y)
+                // Dont check the car itself
+                if ((int)handler.Car.PositionX == rec.X && (int)handler.Car.PositionY == rec.Y)
                     continue;
 
-                // Rechteck des anderen Autos
-                Rectangle other = new Rectangle((int)car.PositionX, (int)car.PositionY, size, size);
-
+                // Rectangle of the other car
+                Rectangle other = new Rectangle((int)handler.Car.PositionX, (int)handler.Car.PositionY, size, size);
+                // Define the area in front and to the right of the car based on its lane
                 Rectangle forwardArea;
                 Rectangle forwardRightArea;
 
+                // Determine the areas based on the car's current lane
                 switch (handler.Car.CurrentLane.ID)
                 {
-                    // ↑ nach oben
+                   
                     case 1:
                         forwardArea = new Rectangle(rec.X, rec.Y - forward, size, size);
                         forwardRightArea = new Rectangle(rec.X + right, rec.Y - forward, size, size);
                         break;
-
-                    // ← nach links
+  
                     case 2:
                         forwardArea = new Rectangle(rec.X - forward, rec.Y, size, size);
                         forwardRightArea = new Rectangle(rec.X - forward, rec.Y - right, size, size);
                         break;
 
-                    // ↓ nach unten
                     case 3:
                         forwardArea = new Rectangle(rec.X, rec.Y + forward, size, size);
                         forwardRightArea = new Rectangle(rec.X - right, rec.Y + forward, size, size);
                         break;
-
-                    // → nach rechts
+        
                     case 4:
                         forwardArea = new Rectangle(rec.X + forward, rec.Y, size, size);
                         forwardRightArea = new Rectangle(rec.X + forward, rec.Y + right, size, size);
@@ -229,13 +232,14 @@ namespace AmpelSimulation.Classes.Services
                         continue;
                 }
 
-                // PRÜFEN: steht irgendein anderes Auto im Abbiegebereich?
+                // Check if the other car is in the defined areas
+                // IntersectsWith() checks if two rectangles overlap
                 if (other.IntersectsWith(forwardArea) || other.IntersectsWith(forwardRightArea))
                 {
                     return false;
                 }
             }
-
+            
             return true;
         }
 
