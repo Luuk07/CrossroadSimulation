@@ -1,6 +1,8 @@
-﻿using AmpelSimulation.Classes.Tools;
+﻿using AmpelSimulation.Classes.Services;
+using AmpelSimulation.Classes.Tools;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,12 +15,8 @@ namespace AmpelSimulation.Classes.Container
         private int _PositionY;
         private CclContLane _CurrentLane;
         //
-        public int LeftTurnPoint = 40;
-
-        public int RightTurnPoint = 12;
-
+        public bool IsDriving { get; set; } = true;
         public bool IsIgnoringTrafficLight { get; set; } = false;
-
         public bool IsAlreadyTurned { get; set; } = false;
         public string Color { get; set; }
         public CarDirection Direction { get; set; }
@@ -78,30 +76,36 @@ namespace AmpelSimulation.Classes.Container
 
         public bool IsAtTurningPointLeft(CclContCar car, CclContTrafficLight trafficLight, int laneID)
         {
-            var currentlaneWidth = car.CurrentLane.Width;   // Sicherstellen, dass die Lane vom *car* ist
+            int laneWidth = (int)car.CurrentLane.Width;
+
             switch (laneID)
             {
                 case 1:
-                    if (car.PositionY == trafficLight.PositionY - currentlaneWidth * 1.5)
+                    if ((int)car.PositionY == (int)(trafficLight.PositionY - laneWidth * 1.5))
                         return true;
                     break;
+
                 case 2:
-                    if (car.PositionX == trafficLight.PositionX - currentlaneWidth * 1.5)
+                    if ((int)car.PositionX == (int)(trafficLight.PositionX - laneWidth * 1.5))
                         return true;
                     break;
+
                 case 3:
-                    if (car.PositionY == trafficLight.PositionY + currentlaneWidth * 1.5)
+                    if ((int)car.PositionY == (int)(trafficLight.PositionY + laneWidth * 1.5))
                         return true;
                     break;
+
                 case 4:
-                    if (car.PositionX == trafficLight.PositionX + currentlaneWidth * 1.5)
+                    if ((int)car.PositionX == (int)(trafficLight.PositionX + laneWidth * 1.5))
                         return true;
-                    break;
-                default:
                     break;
             }
+
             return false;
         }
+
+
+
 
         public bool IsAtTurningPointRight(CclContCar car, CclContTrafficLight trafficLight, int laneID)
         {
@@ -109,19 +113,19 @@ namespace AmpelSimulation.Classes.Container
             switch (laneID)
             {
                 case 1:
-                    if (car.PositionY == trafficLight.PositionY - currentlaneWidth / 2)
+                    if (car.PositionY <= trafficLight.PositionY - currentlaneWidth / 2 && car.Direction == CarDirection.Right)
                         return true;
                     break;
                 case 2:
-                    if (car.PositionX == trafficLight.PositionX - currentlaneWidth / 2)
+                    if (car.PositionX <= trafficLight.PositionX - currentlaneWidth / 2 && car.Direction == CarDirection.Right)
                         return true;
                     break;
                 case 3:
-                    if (car.PositionY == trafficLight.PositionY + currentlaneWidth / 2)
+                    if (car.PositionY >= trafficLight.PositionY + currentlaneWidth / 2 && car.Direction == CarDirection.Right)
                         return true;
                     break;
                 case 4:
-                    if (car.PositionX == trafficLight.PositionX + currentlaneWidth / 2)
+                    if (car.PositionX >= trafficLight.PositionX + currentlaneWidth / 2 && car.Direction == CarDirection.Right)
                         return true;
                     break;
                 default:
@@ -261,6 +265,6 @@ namespace AmpelSimulation.Classes.Container
             }
             PositionChanged?.Invoke(this, EventArgs.Empty);
         }
-
+       
     }
 }

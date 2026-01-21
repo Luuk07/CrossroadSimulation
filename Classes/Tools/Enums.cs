@@ -9,7 +9,7 @@ namespace AmpelSimulation.Classes.Tools
     public enum TrafficLightState
     {
         Red,
-        //Yellow,
+        Yellow,
         Green
     }
     public enum TrafficLightMode

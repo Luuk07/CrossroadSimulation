@@ -40,7 +40,7 @@ namespace AmpelSimulation.Classes.Services
             counterCarPlace++;
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
-            if (counterCarPlace == 200)
+            if (counterCarPlace >= 50)
             {
                 _timer.Stop();
                 counterCarPlace = 0;
@@ -48,12 +48,12 @@ namespace AmpelSimulation.Classes.Services
                 E_PlaceNewCar.Invoke(this, EventArgs.Empty);
                 _timer.Start();
             }
-
+            var a = CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging;
             //Später den Zwischenschritt mit SpeedOfChanging rausnehmen, ist eigentlich unnötig
             switch (CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging)
             {
                 case 1:
-                    if (counterTrafficLight == 700)
+                    if (counterTrafficLight >= 700)
                     {
                         counterTrafficLight = 0;
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
@@ -61,7 +61,7 @@ namespace AmpelSimulation.Classes.Services
                     }
                     break;
                 case 2:
-                    if (counterTrafficLight == 400)
+                    if (counterTrafficLight >= 400)
                     {
                         counterTrafficLight = 0;
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
@@ -69,7 +69,7 @@ namespace AmpelSimulation.Classes.Services
                     }
                     break;
                 case 3:
-                    if (counterTrafficLight == 300)
+                    if (counterTrafficLight >= 300)
                     {
                         counterTrafficLight = 0;
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
@@ -77,7 +77,7 @@ namespace AmpelSimulation.Classes.Services
                     }
                     break;
                 case 4:
-                    if (counterTrafficLight == 200)
+                    if (counterTrafficLight >= 200)
                     {
                         counterTrafficLight = 0;
                         CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();

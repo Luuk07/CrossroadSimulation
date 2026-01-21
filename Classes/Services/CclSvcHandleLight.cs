@@ -10,7 +10,7 @@ namespace AmpelSimulation.Classes.Services
 {
     public class CclSvcHandleLight
     {
-        public List <CclContTrafficLight> TrafficLights { get; set; } = new List<CclContTrafficLight>();
+        public List<CclContTrafficLight> TrafficLights { get; set; } = new List<CclContTrafficLight>();
 
         public event EventHandler StateChanged;
 
@@ -23,18 +23,24 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
-        public void ChangeColorOfTrafficLight()
+        public void ChangeColorOfTrafficLight2()
         {
-            foreach(var light in TrafficLights)
+            foreach (var light in TrafficLights)
             {
-                if (light.CurrentState == TrafficLightState.Green)
-                { 
-                    light.CurrentState = TrafficLightState.Red;
+                var lastState = light.CurrentState;
+                if (light.CurrentState == TrafficLightState.Green || light.CurrentState == TrafficLightState.Red)
+                {
+                    light.CurrentState = TrafficLightState.Yellow;
                     StateChanged?.Invoke(this, EventArgs.Empty);
                 }
-                else if (light.CurrentState == TrafficLightState.Red)
+                else if (lastState == TrafficLightState.Red)
                 {
                     light.CurrentState = TrafficLightState.Green;
+                    StateChanged?.Invoke(this, EventArgs.Empty);
+                }
+                else if (lastState == TrafficLightState.Green)
+                {
+                    light.CurrentState = TrafficLightState.Red;
                     StateChanged?.Invoke(this, EventArgs.Empty);
                 }
                 else
@@ -58,7 +64,57 @@ namespace AmpelSimulation.Classes.Services
                     }
                 }
             }
-            
         }
+
+
+        public async Task ChangeColorOfTrafficLight()
+        {
+            // Vorherige Zustände sichern (bevor wir auf Gelb gehen)
+            var previous = TrafficLights.ToDictionary(l => l, l => l.CurrentState);
+
+            // PHASE 1: Alle gleichzeitig auf Gelb
+            foreach (var l in TrafficLights)
+                SetState(l, TrafficLightState.Yellow);
+
+            // Gemeinsame Wartezeit für alle (UI-freundlich, blockiert nicht)
+            await Task.Delay(2000);
+
+            // PHASE 2: Für alle gemeinsam weiter in den Zielzustand
+            foreach (var l in TrafficLights)
+            {
+                var prev = previous[l];
+
+                if (prev == TrafficLightState.Green)
+                {
+                    // Grün -> (Gelb) -> Rot
+                    SetState(l, TrafficLightState.Red);
+                }
+                else if (prev == TrafficLightState.Red)
+                {
+                    // Rot -> (Gelb) -> Grün
+                    SetState(l, TrafficLightState.Green);
+                }
+                else
+                {
+                    // Falls vorher schon Gelb/Unknown: Richtung anhand der ID bestimmen (deine Logik)
+                    if (l.ID == 1 || l.ID == 3)
+                        SetState(l, TrafficLightState.Red);
+                    else
+                        SetState(l, TrafficLightState.Green);
+                }
+            }
+        }
+
+        // Event-sicherer Setter
+        private void SetState(CclContTrafficLight light, TrafficLightState newState)
+        {
+            if (light.CurrentState != newState)
+            {
+                light.CurrentState = newState;
+                StateChanged?.Invoke(this, EventArgs.Empty);
+            }
+        }
+
+
     }
 }

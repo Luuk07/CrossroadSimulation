@@ -33,13 +33,13 @@ namespace AmpelSimulation
         public void Form1_PaintCar(object sender, PaintEventArgs e) 
         {
             Graphics g = e.Graphics;
-            foreach (var CarHandler in Main.CrossroadHandler.l_CarHandler)
+            foreach (var CarHandler in Main.CrossroadHandler.l_CarHandler.ToList())// Erzeugt Momentaufnahme
             {
                 // Rechteck für das Auto (Breite = 20, Höhe = 10)
                 Rectangle rect = new Rectangle(
                     (int)CarHandler.Car.PositionX * scaleFactor,
                     (int)CarHandler.Car.PositionY * scaleFactor,
-                    5 * scaleFactor / 2, 5 * scaleFactor / 2
+                    10 ,10
                 );
                 using (Brush brush = new SolidBrush(Color.Black))
                 {
@@ -68,7 +68,14 @@ namespace AmpelSimulation
                         g.FillRectangle(brush, rect);
                     }
                 }
-                else
+                else if (trafficLight.CurrentState == TrafficLightState.Yellow)
+                {
+                    using (Brush brush = new SolidBrush(Color.Yellow))
+                    {
+                        g.FillRectangle(brush, rect);
+                    }
+                }
+                else if (trafficLight.CurrentState == TrafficLightState.Red)
                 {
                     using (Brush brush = new SolidBrush(Color.Red))
                     {
@@ -79,6 +86,42 @@ namespace AmpelSimulation
                 
                 g.DrawRectangle(Pens.Black, rect);
             }
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+            button1.Enabled = false;
+            button3.Enabled = true;
+            button4.Enabled = true;
+            button5.Enabled = true;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeTwo);
+            button1.Enabled = true;
+            button3.Enabled = false;
+            button4.Enabled = true;
+            button5.Enabled = true;
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeThree);
+            button1.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = false;
+            button5.Enabled = true;
+        }
+
+        private void button5_Click(object sender, EventArgs e)
+        {
+            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeFour);
+            button1.Enabled = true;
+            button3.Enabled = true;
+            button4.Enabled = true;
+            button5.Enabled = false;
         }
     }
 }
