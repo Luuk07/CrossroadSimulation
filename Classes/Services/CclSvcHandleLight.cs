@@ -37,7 +37,7 @@ namespace AmpelSimulation.Classes.Services
                 SetState(l, TrafficLightState.Yellow);
 
             //Wait for 2 seconds
-            await Task.Delay(2000);
+            await Task.Delay(3000);
 
             // Change to the next state based on previous state
             foreach (var l in TrafficLights)

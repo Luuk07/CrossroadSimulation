@@ -39,14 +39,14 @@ namespace AmpelSimulation.Classes.Services
         // Methods
 
         // Main timer tick method
-        private void MainTick(object sender, ElapsedEventArgs e)
+        private async void MainTick(object sender, ElapsedEventArgs e)
         {
 
             counterCarPlace++;
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
-            // Place new car every 500ms 
-            if (counterCarPlace >= 50)
+            // Place new car every 0,8 second
+            if (counterCarPlace >= 80)
             {
                 _timer.Stop();
                 counterCarPlace = 0;
@@ -62,7 +62,7 @@ namespace AmpelSimulation.Classes.Services
                     if (counterTrafficLight >= 700)
                     {
                         counterTrafficLight = 0;
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
@@ -70,7 +70,7 @@ namespace AmpelSimulation.Classes.Services
                     if (counterTrafficLight >= 400)
                     {
                         counterTrafficLight = 0;
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
@@ -78,7 +78,7 @@ namespace AmpelSimulation.Classes.Services
                     if (counterTrafficLight >= 300)
                     {
                         counterTrafficLight = 0;
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
@@ -86,7 +86,7 @@ namespace AmpelSimulation.Classes.Services
                     if (counterTrafficLight >= 200)
                     {
                         counterTrafficLight = 0;
-                        CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
+                        await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
                         CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;

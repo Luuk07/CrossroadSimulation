@@ -64,7 +64,7 @@ namespace AmpelSimulation.Classes.Services
         // Move cars in the crossroad
         public void MoveCarsInCrossroad()
         {
-            foreach (var carHandler in l_CarHandler)
+            foreach (var carHandler in l_CarHandler.ToList())
             {
                 // Move each car based on its handler
                 if (IsDistanceBetweenCarInFrontEnough(carHandler) && carHandler.Car.IsDriving)
@@ -124,7 +124,7 @@ namespace AmpelSimulation.Classes.Services
         {
            E_MoveCar += (s, e) =>
             {
-                foreach (var carHandler in l_CarHandler)
+                foreach (var carHandler in l_CarHandler.ToList())
                 {
                     if ((carHandler.Car.PositionX < -100|| carHandler.Car.PositionX>100) || (carHandler.Car.PositionY < -100 || carHandler.Car.PositionY >100))
                     {

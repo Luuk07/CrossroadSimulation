@@ -11,10 +11,6 @@ namespace AmpelSimulation.Classes.Container
 {
     public class CclContCar
     {
-        private int _PositionX;
-        private int _PositionY;
-        private CclContLane _CurrentLane;
-        //
         public bool IsDriving { get; set; } = true;
         public bool IsIgnoringTrafficLight { get; set; } = false;
         public bool IsAlreadyTurned { get; set; } = false;
@@ -43,6 +39,8 @@ namespace AmpelSimulation.Classes.Container
 
         //Eventhandler
         public event EventHandler PositionChanged;
+
+        public event EventHandler CarStopped;
 
         // Constructor
 
@@ -151,6 +149,7 @@ namespace AmpelSimulation.Classes.Container
         {
             // Stop the car
             Speed = 0;
+            CarStopped?.Invoke(this, EventArgs.Empty);
         }
         // Method to turn the car left
         public void TurnLeft(int LaneID)

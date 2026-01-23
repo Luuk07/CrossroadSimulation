@@ -34,6 +34,7 @@ namespace AmpelSimulation.Classes.Services
             {
                 PoitionChangedLogik(carHandlers);
             };
+
             // Subscribe to the StateChanged event of the traffic light which triggers the logic when the traffic light changes
             LightHandler.StateChanged += (s, e) =>
             {
@@ -46,16 +47,31 @@ namespace AmpelSimulation.Classes.Services
                     PoitionChangedLogik(carHandlers); 
                 } 
             };
+
             // Klappt noch nicht so ganz, ich finde aber kein Event, welches auslöst, wenn das Auto fahren könnte
             // Subscribe to the E_LaneCountChanged event of the current lane which triggers the logic when the lane changes
             Car.CurrentLane.E_LaneCountChanged += (s, e) =>
             {
                 PoitionChangedLogik(carHandlers);
             };
+
+            // Subscribe to the CarStopped event of the car which triggers the logic when the car stops
+            Car.CarStopped += async (s, e) =>
+            {
+                try
+                {
+                    await DelayForCarToPassCrossroad(carHandlers);
+
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error in DelayForCarToPassCrossroad: {ex.Message}");
+                }
+            };
         }
 
         // Logic when the position of the car changes
-        public void PoitionChangedLogik(List<CclSvcHandleCar> carHandlers)
+        public async void PoitionChangedLogik(List<CclSvcHandleCar> carHandlers)
         {
             Rec = new Rectangle((int)Car.PositionX, (int)Car.PositionY, 10, 10);
 
@@ -79,7 +95,14 @@ namespace AmpelSimulation.Classes.Services
                 {
                     Car.Stop(Car.CurrentLane.ID); 
                     Car.IsDriving = false;
-                    ChangeDirectionToStraightAfterDelay(carHandlers); 
+                    try
+                    {
+                        await ChangeDirectionToStraightAfterDelay(carHandlers); 
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error in ChangeDirectionToStraightAfterDelay: {ex.Message}");
+                    }
                 }
 
             }
@@ -91,15 +114,28 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
+        // Delay for checking again after car had stopped at the crossroad
+        public async Task DelayForCarToPassCrossroad(List<CclSvcHandleCar> carHandlers)
+        {
+            try
+            {
+                await Task.Delay(150); 
+                PoitionChangedLogik(carHandlers);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error in DelayForCarToPassCrossroad: {ex.Message}");
+            }
+        }
+
         // Drive straight after delay -> to avoid blocking the crossroad
         public async Task ChangeDirectionToStraightAfterDelay(List<CclSvcHandleCar> carHandlers)
         {
-            await Task.Delay(3000); // wait for 3 seconds
-
-            Car.IsDriving = true;
-            Car.Direction = CarDirection.Straight;
-            SetCarDirection();
-            Car.StartOrContinueDriving(Car.CurrentLane.ID);
+             await Task.Delay(1000); // wait for 1 seconds
+             Car.IsDriving = true;
+             Car.Direction = CarDirection.Straight;
+             SetCarDirection();
+             Car.StartOrContinueDriving(Car.CurrentLane.ID);
         }
 
         // Check the traffic light state and handle the car behavior
@@ -151,7 +187,7 @@ namespace AmpelSimulation.Classes.Services
         public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> carHandlers)
         {
             // Size of the car
-            const int size = 5;   
+            const int size = 10;   
             
             // Checking area in front of the car
             const int forward = 10;   
