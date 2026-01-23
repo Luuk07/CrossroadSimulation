@@ -239,8 +239,6 @@ namespace AmpelSimulation.Classes.Services
             return true;
         }
 
-
-
         public void RemoveCarFromCrossroad()
         {
            E_MoveCar += (s, e) =>

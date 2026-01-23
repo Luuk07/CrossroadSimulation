@@ -42,8 +42,7 @@ namespace AmpelSimulation.Classes.Services
                 else
                 {
                     PoitionChangedLogik(carHandlers); 
-                }
-                
+                } 
             };
             // Klappt noch nicht so ganz, ich finde aber kein Event, welches auslöst, wenn das Auto fahren könnte
             Car.CurrentLane.E_LaneCountChanged += (s, e) =>
@@ -186,7 +185,7 @@ namespace AmpelSimulation.Classes.Services
         public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> carHandlers)
         {
             // Size of the car
-            const int size = 2;   
+            const int size = 5;   
             
             // Checking area in front of the car
             const int forward = 10;   
