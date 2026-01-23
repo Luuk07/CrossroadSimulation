@@ -14,89 +14,46 @@ namespace AmpelSimulation.Classes.Services
 
         public event EventHandler StateChanged;
 
+
+        // Methods 
+
+        // Method to sync all traffic lights in the crossroad and give them the same mode
         public void SyncTrafficLights(TrafficLightMode Mode)
         {
-            // Sync all traffic lights in the crossroad and give them the same mode
             foreach (var light in TrafficLights)
             {
                 light.SpeedChangeMode(Mode);
             }
         }
 
-        public void ChangeColorOfTrafficLight2()
-        {
-            foreach (var light in TrafficLights)
-            {
-                var lastState = light.CurrentState;
-                if (light.CurrentState == TrafficLightState.Green || light.CurrentState == TrafficLightState.Red)
-                {
-                    light.CurrentState = TrafficLightState.Yellow;
-                    StateChanged?.Invoke(this, EventArgs.Empty);
-                }
-                else if (lastState == TrafficLightState.Red)
-                {
-                    light.CurrentState = TrafficLightState.Green;
-                    StateChanged?.Invoke(this, EventArgs.Empty);
-                }
-                else if (lastState == TrafficLightState.Green)
-                {
-                    light.CurrentState = TrafficLightState.Red;
-                    StateChanged?.Invoke(this, EventArgs.Empty);
-                }
-                else
-                {
-                    switch (light.ID)
-                    {
-                        case 1:
-                            light.CurrentState = TrafficLightState.Green;
-                            break;
-                        case 2:
-                            light.CurrentState = TrafficLightState.Red;
-                            break;
-                        case 3:
-                            light.CurrentState = TrafficLightState.Green;
-                            break;
-                        case 4:
-                            light.CurrentState = TrafficLightState.Red;
-                            break;
-                        default:
-                            break;
-                    }
-                }
-            }
-        }
-
-
+        // Method to change the color of all traffic lights in the crossroad
         public async Task ChangeColorOfTrafficLight()
         {
-            // Vorherige Zustände sichern (bevor wir auf Gelb gehen)
+            // To hold the previous states before changing to Yellow
             var previous = TrafficLights.ToDictionary(l => l, l => l.CurrentState);
 
-            // PHASE 1: Alle gleichzeitig auf Gelb
+            //All traffic lights to Yellow first
             foreach (var l in TrafficLights)
                 SetState(l, TrafficLightState.Yellow);
 
-            // Gemeinsame Wartezeit für alle (UI-freundlich, blockiert nicht)
+            //Wait for 2 seconds
             await Task.Delay(2000);
 
-            // PHASE 2: Für alle gemeinsam weiter in den Zielzustand
+            // Change to the next state based on previous state
             foreach (var l in TrafficLights)
             {
                 var prev = previous[l];
 
                 if (prev == TrafficLightState.Green)
                 {
-                    // Grün -> (Gelb) -> Rot
                     SetState(l, TrafficLightState.Red);
                 }
                 else if (prev == TrafficLightState.Red)
                 {
-                    // Rot -> (Gelb) -> Grün
                     SetState(l, TrafficLightState.Green);
                 }
                 else
-                {
-                    // Falls vorher schon Gelb/Unknown: Richtung anhand der ID bestimmen (deine Logik)
+                { 
                     if (l.ID == 1 || l.ID == 3)
                         SetState(l, TrafficLightState.Red);
                     else
@@ -105,7 +62,7 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
-        // Event-sicherer Setter
+        // Helper method to set the state and trigger event if changed
         private void SetState(CclContTrafficLight light, TrafficLightState newState)
         {
             if (light.CurrentState != newState)

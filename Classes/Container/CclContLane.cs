@@ -16,7 +16,9 @@ namespace AmpelSimulation.Classes.Container
         public int Width { get; set; } = 10;
         public List<CclSvcHandleCar> CarsInLane { get; set;} = new List<CclSvcHandleCar>();
 
+        // Methods
 
+        //Method to invoke event when lane count changes
         public void LaneCountChanged()
         {
             E_LaneCountChanged?.Invoke(this, EventArgs.Empty);

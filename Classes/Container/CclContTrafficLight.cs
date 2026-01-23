@@ -18,6 +18,9 @@ namespace AmpelSimulation.Classes.Container
         public int PositionY { get; set; }
         // 
 
+        // Methods
+
+        // Method to change speed of TrafficLight based on the mode
         public void SpeedChangeMode(TrafficLightMode mode)
         {
             // Change speed based on mode

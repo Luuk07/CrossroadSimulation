@@ -19,6 +19,8 @@ namespace AmpelSimulation.Classes.Services
         };
 
         private CclContLane GetLaneById(int id) => l_AllLane.First(l => l.ID == id);
+
+        //Method to create a new car
         public CclContCar CreateNewCar()
         {
             // Create car logic here
@@ -30,7 +32,10 @@ namespace AmpelSimulation.Classes.Services
                 CurrentLane = l_AllLane[CclRandom.Random.Next(l_AllLane.Count)],  
                 Direction = (CarDirection)CclRandom.Random.Next(1, 4),
             };
+            // Car get laneID resolver based on current lane 
             car.ResolveLaneById = GetLaneById;
+
+            // Set initial position based on lane
             switch (car.CurrentLane.ID)
             {
                 case 1:
@@ -54,6 +59,7 @@ namespace AmpelSimulation.Classes.Services
 
         }
 
+        //Method to create lanes
         public void CreateLanes()
         {
             for (int i = 0; i < 4; i++)
@@ -66,6 +72,7 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
+        //Method to create traffic lights
         public void CreateTrafficLight()
         {
             foreach (var lane in l_AllLane)
@@ -75,7 +82,9 @@ namespace AmpelSimulation.Classes.Services
                     CurrentLane = lane,
                     ID = lane.ID,
                 };
-                switch(lane.ID)
+
+                // Set position and initial state based on lane
+                switch (lane.ID)
                 {
                     case 1:
                         trafficLight.PositionX = 70;

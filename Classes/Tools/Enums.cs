@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace AmpelSimulation.Classes.Tools
 {
+
+    // Enums for Traffic Light States, Modes, and Car Directions
     public enum TrafficLightState
     {
         Red,

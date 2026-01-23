@@ -47,6 +47,7 @@ namespace AmpelSimulation.Classes.Container
         // Constructor
 
         // Methods
+        // Method check if car is at TrafficLight
         public bool IsAtTrafficLight(CclContTrafficLight trafficLight, int laneID)
         {
             switch (laneID)
@@ -74,6 +75,7 @@ namespace AmpelSimulation.Classes.Container
 
         }
 
+        // Method check if car is at TurningPoint for left turn
         public bool IsAtTurningPointLeft(CclContCar car, CclContTrafficLight trafficLight, int laneID)
         {
             int laneWidth = (int)car.CurrentLane.Width;
@@ -106,7 +108,7 @@ namespace AmpelSimulation.Classes.Container
 
 
 
-
+        // Method check if car is at TurningPoint for right turn
         public bool IsAtTurningPointRight(CclContCar car, CclContTrafficLight trafficLight, int laneID)
         {
             var currentlaneWidth = car.CurrentLane.Width;
@@ -134,46 +136,23 @@ namespace AmpelSimulation.Classes.Container
             return false;
         }
 
-        //public bool CarInFront(int lineID)
-        //{
-        //    switch (lineID)
-        //    {
-        //        case 1:
-        //            if (PositionY == + 10)
-        //                return true;
-        //            break;
-        //        case 2:
-        //            if (PositionX == + 10)
-        //                return true;
-        //            break;
-        //        case 3:
-        //            if (PositionY == - 10)
-        //                return true;
-        //            break;
-        //        case 4:
-        //            if (PositionX ==  - 10)
-        //                return true;
-        //            break;
-        //        default:
-        //            break;
-        //    }
-        //    return false;
-        //}
 
         // Methods to control the car
+
+        // Method to start or continue driving
         public void StartOrContinueDriving(int LaneID)
         {
             // Position update based on lane
             Speed = 1; // Set speed to normal driving speed
             StraightAhead(LaneID);
         }
-
+        // Method to stop the car
         public void Stop(int LaneID)
         {
             // Stop the car
             Speed = 0;
-        }   
-
+        }
+        // Method to turn the car left
         public void TurnLeft(int LaneID)
         {
             // Turn the car left
@@ -209,6 +188,7 @@ namespace AmpelSimulation.Classes.Container
             }
         }
 
+        // Method to turn the car right
         public void TurnRight(int LaneID)
         {
             // Turn the car right

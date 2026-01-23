@@ -28,11 +28,13 @@ namespace AmpelSimulation.Classes.Services
             Car = car;
             TrafficLight = trafficLight;
             LightHandler = lightHandler;
-            if (!ReferenceEquals(car, Car)) return; 
+            if (!ReferenceEquals(car, Car)) return;
+            // Subscribe to the PositionChanged event of the car which triggers the logic when the car moves
             Car.PositionChanged += (s, e) =>
             {
                 PoitionChangedLogik(carHandlers);
             };
+            // Subscribe to the StateChanged event of the traffic light which triggers the logic when the traffic light changes
             LightHandler.StateChanged += (s, e) =>
             {
                 if (Car.IsAtTrafficLight(TrafficLight, Car.CurrentLane.ID) && !Car.IsIgnoringTrafficLight)
@@ -45,13 +47,14 @@ namespace AmpelSimulation.Classes.Services
                 } 
             };
             // Klappt noch nicht so ganz, ich finde aber kein Event, welches auslöst, wenn das Auto fahren könnte
+            // Subscribe to the E_LaneCountChanged event of the current lane which triggers the logic when the lane changes
             Car.CurrentLane.E_LaneCountChanged += (s, e) =>
             {
                 PoitionChangedLogik(carHandlers);
             };
         }
 
-       
+        // Logic when the position of the car changes
         public void PoitionChangedLogik(List<CclSvcHandleCar> carHandlers)
         {
             Rec = new Rectangle((int)Car.PositionX, (int)Car.PositionY, 10, 10);
@@ -61,8 +64,10 @@ namespace AmpelSimulation.Classes.Services
             {
                 CheckTrafficLightState();
             }
+            // Check if the car is at the turning point for left and if the direction is of the car is left
             else if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(Car, TrafficLight, Car.CurrentLane.ID))
             {
+                // Check if the car can drive at the turning point
                 if (CheckIfCarCanDriveAtTurningPoint(Rec, carHandlers))
                 {
                     Car.IsIgnoringTrafficLight = true;
@@ -78,6 +83,7 @@ namespace AmpelSimulation.Classes.Services
                 }
 
             }
+            // Check if the car is at the turning point for right and if the direction is of the car is right
             else if (Car.Direction == CarDirection.Right && Car.IsAtTurningPointRight(Car, TrafficLight, Car.CurrentLane.ID))
             {
                 Car.IsIgnoringTrafficLight = true;
@@ -85,10 +91,10 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
-        // Drive straight after delay
+        // Drive straight after delay -> to avoid blocking the crossroad
         public async Task ChangeDirectionToStraightAfterDelay(List<CclSvcHandleCar> carHandlers)
         {
-            await Task.Delay(3000); // 3 Sekunden warten
+            await Task.Delay(3000); // wait for 3 seconds
 
             Car.IsDriving = true;
             Car.Direction = CarDirection.Straight;
@@ -96,6 +102,7 @@ namespace AmpelSimulation.Classes.Services
             Car.StartOrContinueDriving(Car.CurrentLane.ID);
         }
 
+        // Check the traffic light state and handle the car behavior
         public void CheckTrafficLightState()
         {
             // Check the traffic light of the current car -> handle car behavior
@@ -104,7 +111,6 @@ namespace AmpelSimulation.Classes.Services
                 // Car can drive
                 Car.IsDriving = true;
                 Car.StartOrContinueDriving(Car.CurrentLane.ID);
-                //SetCarDirection();
             }
             else
             {
@@ -114,74 +120,34 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
+        // Set the car direction based on its intended direction
         public void SetCarDirection()
         {
             // Check the car direction and handle the car behavior
             if (Car.Direction == CarDirection.Left && !Car.IsAlreadyTurned)
             {
-                // Turn left
+                // Turn left -> set the new lane id after turning
                 Car.TurnLeft(Car.CurrentLane.ID);
                 Car.IsAlreadyTurned = true;
                 Car.Direction = CarDirection.Straight;
             }
             else if (Car.Direction == CarDirection.Right && !Car.IsAlreadyTurned)
             {
-                // Turn right
+                // Turn right -> set the new lane id after turning
                 Car.TurnRight(Car.CurrentLane.ID);
                 Car.IsAlreadyTurned = true;
                 Car.Direction = CarDirection.Straight;
             }
             else if (Car.Direction == CarDirection.Straight)
             {
-                // Drive straight ahead
+                // Drive straight ahead -> set the new lane id after turning
                 Car.StraightAhead(Car.CurrentLane.ID);
 
             }
 
         }
-        //public bool CheckIfCarCanDriveAtTurningPoint2(Rectangle rec, List<CclSvcHandleCar> carHandler)
-        //{
-        //    foreach (var currentCarHandler in carHandler)
-        //    {
-        //        int laneID = currentCarHandler.Car.CurrentLane.ID;
-        //        switch (laneID)
-        //        {
-        //            case 1:
-        //                if (rec.Contains((int)currentCarHandler.Car.PositionX, (int)currentCarHandler.Car.PositionY - 10))
-        //                {
-        //                    return false;
-        //                }
-        //                break;
-        //            case 2:
-        //                if (rec.Contains((int)currentCarHandler.Car.PositionX - 10, (int)currentCarHandler.Car.PositionY))
-        //                {
-        //                    return false;
-        //                }
-        //                break;
-        //            case 3:
-        //                if (rec.Contains((int)currentCarHandler.Car.PositionX, (int)currentCarHandler.Car.PositionY + 10))
-        //                {
-        //                    return false;
-        //                }
-        //                break;
-        //            case 4:
-        //                if (rec.Contains((int)currentCarHandler.Car.PositionX + 10, (int)currentCarHandler.Car.PositionY))
-        //                {
-        //                    return false;
-        //                }
-        //                break;
-        //            default:
-        //                break;
-        //        }
-        //    }
-        //    return true;
 
-        //}
-
-
-
-
-
+        // Method to check if another car is in front or to the right of the car at the turning point
         public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> carHandlers)
         {
             // Size of the car
@@ -199,6 +165,7 @@ namespace AmpelSimulation.Classes.Services
 
                 // Rectangle of the other car
                 Rectangle other = new Rectangle((int)handler.Car.PositionX, (int)handler.Car.PositionY, size, size);
+
                 // Define the area in front and to the right of the car based on its lane
                 Rectangle forwardArea;
                 Rectangle forwardRightArea;
@@ -206,27 +173,22 @@ namespace AmpelSimulation.Classes.Services
                 // Determine the areas based on the car's current lane
                 switch (handler.Car.CurrentLane.ID)
                 {
-                   
                     case 1:
                         forwardArea = new Rectangle(rec.X, rec.Y - forward, size, size);
                         forwardRightArea = new Rectangle(rec.X + right, rec.Y - forward, size, size);
                         break;
-  
                     case 2:
                         forwardArea = new Rectangle(rec.X - forward, rec.Y, size, size);
                         forwardRightArea = new Rectangle(rec.X - forward, rec.Y - right, size, size);
                         break;
-
                     case 3:
                         forwardArea = new Rectangle(rec.X, rec.Y + forward, size, size);
                         forwardRightArea = new Rectangle(rec.X - right, rec.Y + forward, size, size);
                         break;
-        
                     case 4:
                         forwardArea = new Rectangle(rec.X + forward, rec.Y, size, size);
                         forwardRightArea = new Rectangle(rec.X + forward, rec.Y + right, size, size);
                         break;
-
                     default:
                         continue;
                 }

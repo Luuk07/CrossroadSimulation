@@ -30,6 +30,10 @@ namespace AmpelSimulation
 
         }
 
+        // Methods
+
+
+        // Paint Method for Cars
         public void Form1_PaintCar(object sender, PaintEventArgs e) 
         {
             Graphics g = e.Graphics;
@@ -50,6 +54,7 @@ namespace AmpelSimulation
             labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
         }
 
+        // Paint Method for Traffic Lights
         public void Form1_PaintTrafficLight(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
@@ -88,6 +93,7 @@ namespace AmpelSimulation
             }
         }
 
+        // Mode Button Click Events
         private void button1_Click(object sender, EventArgs e)
         {
             Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);

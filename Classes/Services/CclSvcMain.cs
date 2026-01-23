@@ -19,6 +19,7 @@ namespace AmpelSimulation.Classes.Services
         public CclSvcHandleCrossroad CrossroadHandler { get; set; } 
 
         public event EventHandler E_PlaceNewCar;
+
         public CclSvcMain()
         {
             try
@@ -35,11 +36,16 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
+        // Methods
+
+        // Main timer tick method
         private void MainTick(object sender, ElapsedEventArgs e)
         {
+
             counterCarPlace++;
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
+            // Place new car every 500ms 
             if (counterCarPlace >= 50)
             {
                 _timer.Stop();
@@ -48,8 +54,8 @@ namespace AmpelSimulation.Classes.Services
                 E_PlaceNewCar.Invoke(this, EventArgs.Empty);
                 _timer.Start();
             }
-            var a = CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging;
-            //Später den Zwischenschritt mit SpeedOfChanging rausnehmen, ist eigentlich unnötig
+
+            // Change traffic light based on its speed of changing
             switch (CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging)
             {
                 case 1:

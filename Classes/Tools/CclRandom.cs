@@ -8,6 +8,7 @@ namespace AmpelSimulation.Classes.Tools
 {
     public class CclRandom
     {
+        // Static Random instance to be used throughout the application
         public static Random Random = new Random();
     }
 }
