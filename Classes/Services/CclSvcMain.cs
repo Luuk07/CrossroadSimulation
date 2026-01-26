@@ -25,7 +25,7 @@ namespace AmpelSimulation.Classes.Services
             try
             {
                 CrossroadHandler = new CclSvcHandleCrossroad();
-                _timer = new System.Timers.Timer(10);
+                _timer = new System.Timers.Timer(12);
                 _timer.Elapsed += MainTick;
                 _timer.AutoReset = true;
                 _timer.Enabled = false;
@@ -46,7 +46,7 @@ namespace AmpelSimulation.Classes.Services
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
             // Place new car every 0,8 second
-            if (counterCarPlace >= 80)
+            if (counterCarPlace >= 50)
             {
                 _timer.Stop();
                 counterCarPlace = 0;

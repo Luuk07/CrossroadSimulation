@@ -61,6 +61,7 @@ namespace AmpelSimulation.Classes.Services
             lane.LaneCountChanged();
             l_CarHandler.Add(CarHandler);
         }
+
         // Move cars in the crossroad
         public void MoveCarsInCrossroad()
         {
@@ -117,7 +118,6 @@ namespace AmpelSimulation.Classes.Services
 
             return true;
         }
-
 
         // Remove car from crossroad when it passes the crossroad
         public void RemoveCarFromCrossroad()

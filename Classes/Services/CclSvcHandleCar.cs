@@ -84,7 +84,7 @@ namespace AmpelSimulation.Classes.Services
             else if (Car.Direction == CarDirection.Left && Car.IsAtTurningPointLeft(Car, TrafficLight, Car.CurrentLane.ID))
             {
                 // Check if the car can drive at the turning point
-                if (CheckIfCarCanDriveAtTurningPoint(Rec, carHandlers))
+                if (CheckIfCarCanDriveAtTurningPoint(Rec, carHandlers, this))
                 {
                     Car.IsIgnoringTrafficLight = true;
                     Car.IsDriving = true;
@@ -184,14 +184,17 @@ namespace AmpelSimulation.Classes.Services
         }
 
         // Method to check if another car is in front or to the right of the car at the turning point
-        public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> carHandlers)
+        public bool CheckIfCarCanDriveAtTurningPoint2(Rectangle rec, List<CclSvcHandleCar> carHandlers, CclSvcHandleCar currentCarHandler)
         {
             // Size of the car
-            const int size = 10;   
+            const int size = 10;
+            const int forwardSize = 7;
+            const int leftSize = 7;
             
             // Checking area in front of the car
             const int forward = 10;   
-            const int right = 10;     
+            const int right = 10;
+            const int left = 10;
 
             foreach (var handler in carHandlers)
             {
@@ -203,27 +206,31 @@ namespace AmpelSimulation.Classes.Services
                 Rectangle other = new Rectangle((int)handler.Car.PositionX, (int)handler.Car.PositionY, size, size);
 
                 // Define the area in front and to the right of the car based on its lane
-                Rectangle forwardArea;
+                Rectangle leftArea;
                 Rectangle forwardRightArea;
+                Rectangle forwardLeftArea;
 
                 // Determine the areas based on the car's current lane
-                switch (handler.Car.CurrentLane.ID)
+
+                // Optional: Wenn du "left" noch nicht hast, ersetze überall "left" durch deinen bisherigen seitlichen Offset.
+             
+                switch (currentCarHandler.Car.CurrentLane.ID)
                 {
                     case 1:
-                        forwardArea = new Rectangle(rec.X, rec.Y - forward, size, size);
-                        forwardRightArea = new Rectangle(rec.X + right, rec.Y - forward, size, size);
+                        leftArea = new Rectangle(rec.X, rec.Y - forward, size, size);
+                        forwardLeftArea = new Rectangle(rec.X + right, rec.Y - forward, size, size);
                         break;
                     case 2:
-                        forwardArea = new Rectangle(rec.X - forward, rec.Y, size, size);
-                        forwardRightArea = new Rectangle(rec.X - forward, rec.Y - right, size, size);
+                        leftArea = new Rectangle(rec.X - forward, rec.Y, size, size);
+                        forwardLeftArea = new Rectangle(rec.X - forward, rec.Y - right, size, size);
                         break;
                     case 3:
-                        forwardArea = new Rectangle(rec.X, rec.Y + forward, size, size);
-                        forwardRightArea = new Rectangle(rec.X - right, rec.Y + forward, size, size);
+                        leftArea = new Rectangle(rec.X, rec.Y + forward, size, size);
+                        forwardLeftArea = new Rectangle(rec.X - right, rec.Y + forward, size, size);
                         break;
                     case 4:
-                        forwardArea = new Rectangle(rec.X + forward, rec.Y, size, size);
-                        forwardRightArea = new Rectangle(rec.X + forward, rec.Y + right, size, size);
+                        leftArea = new Rectangle(rec.X + forward, rec.Y, size, size);
+                        forwardLeftArea = new Rectangle(rec.X + forward, rec.Y + right, size, size);
                         break;
                     default:
                         continue;
@@ -231,7 +238,7 @@ namespace AmpelSimulation.Classes.Services
 
                 // Check if the other car is in the defined areas
                 // IntersectsWith() checks if two rectangles overlap
-                if (other.IntersectsWith(forwardArea) || other.IntersectsWith(forwardRightArea))
+                if (other.IntersectsWith(leftArea) || other.IntersectsWith(forwardLeftArea))
                 {
                     return false;
                 }
@@ -240,5 +247,64 @@ namespace AmpelSimulation.Classes.Services
             return true;
         }
 
+        public bool CheckIfCarCanDriveAtTurningPoint(Rectangle rec, List<CclSvcHandleCar> carHandlers, CclSvcHandleCar currentCarHandler)
+        {
+            // Size of the car
+            const int size = 10;
+
+            // Checking areas
+            const int forwardSize = 10;  
+            const int leftSize = 10;
+
+            // Distances for checking areas
+            const int forward = 10;
+            const int left = 10;        
+
+            foreach (var handler in carHandlers)
+            {
+                // Das eigene Auto nicht prüfen
+                if ((int)handler.Car.PositionX == rec.X && (int)handler.Car.PositionY == rec.Y)
+                    continue;
+
+                // Rechteck des anderen Autos
+                Rectangle other = new Rectangle((int)handler.Car.PositionX, (int)handler.Car.PositionY, size, size);
+
+                // Bereiche links und vorne-links relativ zum EIGENEN Fahrzeug (rec)
+                Rectangle leftArea;
+                Rectangle forwardLeftArea;
+
+                // Bereiche abhängig von der aktuellen Lane des EIGENEN Fahrzeugs bestimmen
+                switch (currentCarHandler.Car.CurrentLane.ID)
+                {
+                    case 1: 
+                        leftArea = new Rectangle(rec.X - left, rec.Y, leftSize, leftSize);
+                        forwardLeftArea = new Rectangle(rec.X - left, rec.Y - forward, forwardSize, forwardSize);
+                        break;
+                    case 2: 
+                        leftArea = new Rectangle(rec.X, rec.Y + left, leftSize, leftSize);
+                        forwardLeftArea = new Rectangle(rec.X - forward, rec.Y + left, forwardSize, forwardSize);
+                        break;
+                    case 3: 
+                        leftArea = new Rectangle(rec.X + left, rec.Y, leftSize, leftSize);
+                        forwardLeftArea = new Rectangle(rec.X + left, rec.Y + forward, forwardSize, forwardSize);
+                        break;
+                    case 4: 
+                        leftArea = new Rectangle(rec.X, rec.Y - left, leftSize, leftSize);
+                        forwardLeftArea = new Rectangle(rec.X + forward, rec.Y - left, forwardSize, forwardSize);
+                        break;
+                    default:
+                        continue;
+                }
+
+                // Prüfen, ob das andere Auto in einem der relevanten Bereiche ist
+                if (other.IntersectsWith(leftArea) || other.IntersectsWith(forwardLeftArea))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
     }
-    }
+}
