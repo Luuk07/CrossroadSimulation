@@ -40,6 +40,7 @@ namespace AmpelSimulation.Classes.Services
 
         public event EventHandler E_MoveCar;
 
+        public event EventHandler E_RemoveCar;
         public CclSvcHandleCrossroad() 
         {
             Creat.CreateLanes();
@@ -122,20 +123,16 @@ namespace AmpelSimulation.Classes.Services
         // Remove car from crossroad when it passes the crossroad
         public void RemoveCarFromCrossroad()
         {
-           E_MoveCar += (s, e) =>
+          foreach (var carHandler in l_CarHandler.ToList())
             {
-                foreach (var carHandler in l_CarHandler.ToList())
+                if ((carHandler.Car.PositionX < -100|| carHandler.Car.PositionX>100) || (carHandler.Car.PositionY < -100 || carHandler.Car.PositionY >100))
                 {
-                    if ((carHandler.Car.PositionX < -100|| carHandler.Car.PositionX>100) || (carHandler.Car.PositionY < -100 || carHandler.Car.PositionY >100))
-                    {
-                        l_CarHandler.Remove(carHandler);
-                        Lanes.FirstOrDefault(l => l.ID == carHandler.Car.CurrentLane.ID).CarsInLane.Remove(carHandler);
-                        Statistic.TotalCarsPassed += 1;
-
-                    }
+                    l_CarHandler.Remove(carHandler);
+                    Lanes.FirstOrDefault(l => l.ID == carHandler.Car.CurrentLane.ID).CarsInLane.Remove(carHandler);
+                    Statistic.TotalCarsPassed += 1;
                 }
-                
-            };
+            }
+
         }
 
 

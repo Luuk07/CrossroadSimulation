@@ -45,6 +45,7 @@ namespace AmpelSimulation.Classes.Services
             counterCarPlace++;
             counterTrafficLight++;
             CrossroadHandler.MoveCarsInCrossroad();
+            CrossroadHandler.RemoveCarFromCrossroad();
             // Place new car every 0,8 second
             if (counterCarPlace >= 50)
             {
@@ -63,7 +64,6 @@ namespace AmpelSimulation.Classes.Services
                     {
                         counterTrafficLight = 0;
                         await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 case 2:
@@ -71,7 +71,6 @@ namespace AmpelSimulation.Classes.Services
                     {
                         counterTrafficLight = 0;
                         await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 case 3:
@@ -79,15 +78,13 @@ namespace AmpelSimulation.Classes.Services
                     {
                         counterTrafficLight = 0;
                         await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        CrossroadHandler.RemoveCarFromCrossroad();
                     }
                     break;
                 case 4:
                     if (counterTrafficLight >= 200)
                     {
                         counterTrafficLight = 0;
-                        await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                        CrossroadHandler.RemoveCarFromCrossroad();
+                        await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight(); 
                     }
                     break;
                 default:
