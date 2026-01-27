@@ -9,5 +9,7 @@ namespace AmpelSimulation.Classes.Container
     public class CclContStatistic
     {
         public int TotalCarsPassed { get; set; } = 0;
+
+        public int Timer { get; set; } = 0;
     }
 }

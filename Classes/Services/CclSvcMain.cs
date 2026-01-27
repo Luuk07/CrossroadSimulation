@@ -15,10 +15,13 @@ namespace AmpelSimulation.Classes.Services
         private static System.Timers.Timer _timer;
         private int counterCarPlace = 0;
         private int counterTrafficLight = 0;
+        private int counterTimer = 0;
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; } 
 
         public event EventHandler E_PlaceNewCar;
+
+        public event EventHandler E_UIUpdate;
 
         public CclSvcMain()
         {
@@ -44,8 +47,15 @@ namespace AmpelSimulation.Classes.Services
 
             counterCarPlace++;
             counterTrafficLight++;
+            counterTimer++;
             CrossroadHandler.MoveCarsInCrossroad();
             CrossroadHandler.RemoveCarFromCrossroad();
+            if (counterTimer >= 83)
+            {
+                counterTimer = 0;
+                CrossroadHandler.Statistic.Timer++;
+                E_UIUpdate.Invoke(this, EventArgs.Empty);
+            }
             // Place new car every 0,8 second
             if (counterCarPlace >= 50)
             {
@@ -53,6 +63,7 @@ namespace AmpelSimulation.Classes.Services
                 counterCarPlace = 0;
                 CrossroadHandler.PlaceNewCar();
                 E_PlaceNewCar.Invoke(this, EventArgs.Empty);
+                E_UIUpdate.Invoke(this, EventArgs.Empty);
                 _timer.Start();
             }
 
