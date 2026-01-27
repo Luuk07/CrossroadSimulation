@@ -17,6 +17,15 @@ namespace AmpelSimulation
         public CclSvcMain Main { get; set; }
 
         public int scaleFactor = 5;
+
+        private SolidBrush brushRedOn = new SolidBrush(Color.FromArgb(255, 0, 0));
+        private SolidBrush brushRedOff = new SolidBrush(Color.FromArgb(102, 0, 0));
+        private SolidBrush brushYellowOn = new SolidBrush(Color.FromArgb(255, 255, 0));
+        private SolidBrush brushYellowOff = new SolidBrush(Color.FromArgb(153, 153, 0));
+        private SolidBrush brushGreenOn = new SolidBrush(Color.FromArgb(0, 255, 0));
+        private SolidBrush brushGreenOff = new SolidBrush(Color.FromArgb(0, 102, 0));
+
+
         public Form1()
         {
             Main = new CclSvcMain();
@@ -56,6 +65,50 @@ namespace AmpelSimulation
 
         // Paint Method for Traffic Lights
         public void Form1_PaintTrafficLight(object sender, PaintEventArgs e)
+        {
+            int size = 4 * scaleFactor / 2;
+            int space = scaleFactor / 2;
+            int step = size + space;
+            Graphics g = e.Graphics;
+            foreach (var trafficLight in Main.CrossroadHandler.TrafficLights)
+            {
+
+                int x = (int)(trafficLight.PositionX * scaleFactor)-12;
+                int y = (int)(trafficLight.PositionY * scaleFactor)-12;
+
+                // Rechteck für die Ampel (Breite = 10, Höhe = 30)
+
+                Rectangle rectRed = new Rectangle(x, y + 0 * step, size, size);
+                Rectangle rectYellow = new Rectangle(x, y + 1 * step, size, size);
+                Rectangle rectGreen = new Rectangle(x, y + 2 * step, size, size);
+
+
+                if (trafficLight.CurrentState == TrafficLightState.Green)
+                {       
+                     g.FillRectangle(brushRedOff, rectRed);  
+                     g.FillRectangle(brushYellowOff, rectYellow);
+                     g.FillRectangle(brushGreenOn, rectGreen);
+                }
+                else if (trafficLight.CurrentState == TrafficLightState.Yellow)
+                {
+                     g.FillRectangle(brushRedOff, rectRed);
+                     g.FillRectangle(brushYellowOn, rectYellow);
+                     g.FillRectangle(brushGreenOff, rectGreen);
+                }
+                else if (trafficLight.CurrentState == TrafficLightState.Red)
+                {
+                     g.FillRectangle(brushRedOn, rectRed);
+                     g.FillRectangle(brushYellowOff, rectYellow);
+                     g.FillRectangle(brushGreenOff, rectGreen);   
+                }
+
+
+                g.DrawRectangle(Pens.Black, rectRed);
+                g.DrawRectangle(Pens.Black, rectYellow);
+                g.DrawRectangle(Pens.Black, rectGreen);
+            }
+        }
+        public void Form1_PaintTrafficLight2(object sender, PaintEventArgs e)
         {
             Graphics g = e.Graphics;
             foreach (var trafficLight in Main.CrossroadHandler.TrafficLights)
