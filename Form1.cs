@@ -61,9 +61,6 @@ namespace AmpelSimulation
                     UpdateUI();
                 }
             };
-
-
-
         }
 
         // Methods
@@ -74,7 +71,6 @@ namespace AmpelSimulation
 
             labelTimer.Text =
                 $"Simulation Time: {Main.CrossroadHandler.Statistic.Timer}s";
-
             this.Invalidate();
         }
 

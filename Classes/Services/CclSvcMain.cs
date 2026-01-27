@@ -67,6 +67,28 @@ namespace AmpelSimulation.Classes.Services
                 _timer.Start();
             }
 
+            if (CrossroadHandler.Statistic.Timer >= 30)
+            {
+                switch (CrossroadHandler.TrafficLights.FirstOrDefault().CurrentMode)
+                {
+                    case TrafficLightMode.ModeOne:
+                        CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeTwo);
+                        break;
+                    case TrafficLightMode.ModeTwo:
+                        CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeThree);
+                        break;
+                    case TrafficLightMode.ModeThree:
+                        CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeFour);
+                        break;
+                    case TrafficLightMode.ModeFour:
+                        CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+                        break;
+                    default:
+                        break;
+                }
+                CrossroadHandler.Statistic.Timer = 0;
+            }
+
             // Change traffic light based on its speed of changing
             switch (CrossroadHandler.TrafficLights.FirstOrDefault().SpeedOfChanging)
             {
