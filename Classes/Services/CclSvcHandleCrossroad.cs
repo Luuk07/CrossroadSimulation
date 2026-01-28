@@ -49,6 +49,7 @@ namespace AmpelSimulation.Classes.Services
             TrafficLights = Creat.TrafficLights;
             LightHandler.TrafficLights = TrafficLights;
             LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+            LightHandler.SetAllTrafficLightsRedLightSeconds(29);
         }
 
         //Place new car in the crossroad
@@ -83,7 +84,7 @@ namespace AmpelSimulation.Classes.Services
         {
             int laneID = currentCarHandler.Car.CurrentLane.ID;
 
-            foreach (var c in l_CarHandler)
+            foreach (var c in l_CarHandler.ToList())
             {
                 if (ReferenceEquals(c, currentCarHandler) || c.Car.CurrentLane.ID != laneID)
                     continue;

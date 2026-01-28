@@ -32,7 +32,14 @@ namespace AmpelSimulation
             Main.CrossroadHandler.E_MoveCar += (s, e) => this.Invalidate();
             labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
             labelTimer.Text = $"Simulation Time:{Main.CrossroadHandler.Statistic.Timer.ToString()}s";
+            Main.E_Done += (s, e) =>
+            {
 
+                MessageBox.Show(
+                    string.Join(Environment.NewLine, Main.CrossroadHandler.Statistic.ListOfWaitingTimes),
+                    "Wartezeiten"
+                );
+            };
 
             // Subscribe to UI update event
             // If not UI Thread error

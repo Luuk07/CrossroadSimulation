@@ -14,6 +14,10 @@ namespace AmpelSimulation.Classes.Services
 
         public event EventHandler StateChanged;
 
+        private int _isTransitioning = 0;
+
+        public int yellowLightMilliSeconds  = 3000;
+
 
         // Methods 
 
@@ -25,41 +29,63 @@ namespace AmpelSimulation.Classes.Services
                 light.SpeedChangeMode(Mode);
             }
         }
+        public void SetAllTrafficLightsRedLightSeconds(int redLightSeconds)
+        {
+            foreach (var light in TrafficLights)
+            {
+                light.RedLightSeconds = redLightSeconds;
+            }
+        }
 
         // Method to change the color of all traffic lights in the crossroad
         public async Task ChangeColorOfTrafficLight()
         {
-            // To hold the previous states before changing to Yellow
-            var previous = TrafficLights.ToDictionary(l => l, l => l.CurrentState);
+            // Verhindert parallele Umschaltungen
+            if (System.Threading.Interlocked.Exchange(ref _isTransitioning, 1) == 1)
+                return;
 
-            //All traffic lights to Yellow first
-            foreach (var l in TrafficLights)
-                SetState(l, TrafficLightState.Yellow);
 
-            //Wait for 2 seconds
-            await Task.Delay(3000);
-
-            // Change to the next state based on previous state
-            foreach (var l in TrafficLights)
+            try
             {
-                var prev = previous[l];
+                // Snapshot vor Gelb
+                var previous = TrafficLights.ToDictionary(l => l, l => l.CurrentState);
 
-                if (prev == TrafficLightState.Green)
+                // Alle auf Gelb
+                foreach (var l in TrafficLights)
                 {
-                    SetState(l, TrafficLightState.Red);
+                    SetState(l, TrafficLightState.Yellow);
                 }
-                else if (prev == TrafficLightState.Red)
+
+                // Gelb-Dauer
+                await Task.Delay(yellowLightMilliSeconds).ConfigureAwait(false);
+
+                // Zustände auf Basis von previous togglen
+                foreach (var l in TrafficLights)
                 {
-                    SetState(l, TrafficLightState.Green);
-                }
-                else
-                { 
-                    if (l.ID == 1 || l.ID == 3)
+                    var prev = previous[l];
+
+                    if (prev == TrafficLightState.Green)
+                    {
                         SetState(l, TrafficLightState.Red);
-                    else
+                    }
+                    else if (prev == TrafficLightState.Red)
+                    {
                         SetState(l, TrafficLightState.Green);
+                    }
+                    else
+                    {
+                        // Optional: Fallback KONSISTENT halten.
+                        // Empfehlung: Einheitlich auf Red ODER auf Green,
+                        // aber ohne ID-sonderlogik (die erzeugt Asymmetrien).
+                        SetState(l, TrafficLightState.Red);
+                    }
                 }
             }
+            finally
+            {
+                System.Threading.Interlocked.Exchange(ref _isTransitioning, 0);
+            }
+
         }
 
         // Helper method to set the state and trigger event if changed

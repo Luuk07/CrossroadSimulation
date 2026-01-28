@@ -20,6 +20,8 @@ namespace AmpelSimulation.Classes.Services
 
         public List<CclSvcHandleCar> CarHandlers { get; set; }
 
+        public int waitingTimeForChanging = 1000; // in milliseconds
+
         public Rectangle Rec { get; set; }
 
         public CclSvcHandleCar(CclContCar car, CclContTrafficLight trafficLight, CclSvcHandleLight lightHandler, List<CclSvcHandleCar> carHandlers)
@@ -131,7 +133,7 @@ namespace AmpelSimulation.Classes.Services
         // Drive straight after delay -> to avoid blocking the crossroad
         public async Task ChangeDirectionToStraightAfterDelay(List<CclSvcHandleCar> carHandlers)
         {
-             await Task.Delay(1000); // wait for 1 seconds
+             await Task.Delay(waitingTimeForChanging); // wait for 1 seconds
              Car.IsDriving = true;
              Car.Direction = CarDirection.Straight;
              SetCarDirection();
