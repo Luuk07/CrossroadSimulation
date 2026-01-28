@@ -32,6 +32,7 @@ namespace AmpelSimulation
             Main.CrossroadHandler.E_MoveCar += (s, e) => this.Invalidate();
             labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
             labelTimer.Text = $"Simulation Time:{Main.CrossroadHandler.Statistic.Timer.ToString()}s";
+            trackBarOfSimSpeed.Value = Main.multipleTempo;
             Main.E_Done += (s, e) =>
             {
 
@@ -54,12 +55,14 @@ namespace AmpelSimulation
                     // Code to run on the UI thread
                     this.BeginInvoke(new Action(() =>
                     {
+                        Main.multipleTempo = trackBarOfSimSpeed.Value;
                         UpdateUI();
                     }));
                 }
                 // Already on UI thread
                 else
                 {
+                    Main.multipleTempo = trackBarOfSimSpeed.Value;
                     UpdateUI();
                 }
             };
@@ -81,9 +84,8 @@ namespace AmpelSimulation
         public void Form1_PaintCar(object sender, PaintEventArgs e) 
         {
             Graphics g = e.Graphics;
-            foreach (var CarHandler in Main.CrossroadHandler.l_CarHandler.ToList())// Erzeugt Momentaufnahme
+            foreach (var CarHandler in Main.CrossroadHandler.l_CarHandler.ToList())
             {
-                // Rechteck für das Auto (Breite = 20, Höhe = 10)
                 Rectangle rect = new Rectangle(
                     (int)CarHandler.Car.PositionX * scaleFactor,
                     (int)CarHandler.Car.PositionY * scaleFactor,

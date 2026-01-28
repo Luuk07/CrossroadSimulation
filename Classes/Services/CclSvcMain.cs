@@ -23,7 +23,7 @@ namespace AmpelSimulation.Classes.Services
         public int intervalTimer = 1; // Timer interval in milliseconds
         public int IntervallforOneSecond { get; set; } // Default 1 second in ms
 
-        public int multipleTempo = 15; 
+        public int multipleTempo = 1; // Speed of simulation 
 
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; }
@@ -541,13 +541,15 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
-        public void ScaleYellowLightDurationBasedOnIntervall(int interval)
+        public void ScaleYellowLightDurationBasedOnIntervall(int multiple)
         {
-            CrossroadHandler.LightHandler.yellowLightMilliSeconds = CrossroadHandler.LightHandler.yellowLightMilliSeconds/interval;
+            CrossroadHandler.LightHandler.yellowLightMilliSeconds = CrossroadHandler.LightHandler.yellowLightMilliSeconds/ multiple;
         }
-        public void ScaleWaitingTimeForChangingBasedOnIntervall(int interval)
+        public void ScaleWaitingTimeForChangingBasedOnIntervall(int multiple)
         {
-            CrossroadHandler.CarHandler.waitingTimeForChanging = CrossroadHandler.CarHandler.waitingTimeForChanging / interval;
+            CrossroadHandler.CarHandler.waitingTimeForChanging = CrossroadHandler.CarHandler.waitingTimeForChanging / multiple;
+            CrossroadHandler.CarHandler.Car.Speed = CrossroadHandler.CarHandler.Car.Speed * multiple; // Damit die Autos sich schneller bewegen, weiß nicht ob gut,
+                                                                                                      // aber wenn nicht dann sind bei schnelleren Simulationstempo die Autos zu langsam unterwegs
         }
     }
 }

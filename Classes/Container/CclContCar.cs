@@ -33,7 +33,7 @@ namespace AmpelSimulation.Classes.Container
             set;
         }
 
-        public double Speed { get; set; } = 1;
+        public double Speed { get; set; } = 1 ;
 
         // public double Speed { get { return (PS / Weight) * 100; } } If cars should be faster/slower
 
