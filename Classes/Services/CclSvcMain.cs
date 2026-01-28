@@ -82,6 +82,7 @@ namespace AmpelSimulation.Classes.Services
                         break;
                     case TrafficLightMode.ModeFour:
                         CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+                        // Das Eendergebnis der Statistik anzeigen
                         break;
                     default:
                         break;
