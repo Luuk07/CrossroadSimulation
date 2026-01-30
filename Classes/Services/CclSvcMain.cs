@@ -22,7 +22,7 @@ namespace AmpelSimulation.Classes.Services
 
         public int intervalTimer = 1; 
 
-        public int multipleTempo = 15; // Speed of simulation 
+        public int multipleTempo = 1; // Speed of simulation 
 
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; }

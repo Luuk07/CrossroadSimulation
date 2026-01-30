@@ -199,7 +199,7 @@ namespace AmpelSimulation.Classes.Services
             const int forward = 10;
             const int left = 10;        
 
-            foreach (var handler in carHandlers)
+            foreach (var handler in carHandlers.ToList())
             {
                 // Doesnt check itself
                 if ((int)handler.Car.PositionX == rec.X && (int)handler.Car.PositionY == rec.Y)

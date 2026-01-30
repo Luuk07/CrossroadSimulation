@@ -96,11 +96,72 @@ namespace AmpelSimulation
                     (int)CarHandler.Car.PositionY * scaleFactor,
                     10, 10
                 );
+                Rectangle rectLeftCorner = new Rectangle(
+                          (int)CarHandler.Car.PositionX * scaleFactor,
+                          (int)CarHandler.Car.PositionY * scaleFactor,
+                          4, 4
+                );
+                Rectangle rectRightCorner = new Rectangle(
+                        (int)CarHandler.Car.PositionX * scaleFactor,
+                        (int)CarHandler.Car.PositionY * scaleFactor,
+                        4, 4
+              );
+
                 using (Brush brush = new SolidBrush(Color.Black))
                 {
                     g.FillRectangle(brush, rect);
                 }
                 g.DrawRectangle(Pens.Black, rect);
+
+                if (CarHandler.Car.Direction == CarDirection.Left)
+                {
+                    switch (CarHandler.Car.CurrentLane.ID) 
+                    {
+                        case 1:
+                            break;
+                        case 2:
+                            rectLeftCorner.Y += 6;
+                            break;  
+                        case 3:
+                            rectLeftCorner.X += 6;
+                            rectLeftCorner.Y += 6;
+                            break;
+                        case 4:
+                            rectLeftCorner.X += 6;
+                            break;
+                        default:
+                            break;
+                    }
+                    using (Brush brush = new SolidBrush(Color.Orange))
+                    {
+                        g.FillRectangle(brush, rectLeftCorner);
+                    }
+                }
+                if (CarHandler.Car.Direction == CarDirection.Right)
+                {
+                    switch (CarHandler.Car.CurrentLane.ID)
+                    {
+                        case 1:
+                            rectRightCorner.X += 6;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            rectRightCorner.Y += 6;
+                            break;
+                        case 4:
+                            rectRightCorner.X += 6;
+                            rectRightCorner.Y += 6;
+                            break;
+                        default:
+                            break;
+                    }
+                    using (Brush brush = new SolidBrush(Color.Orange))
+                    {
+                        g.FillRectangle(brush, rectRightCorner);
+                    }
+                }
+
             }
             labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
         }
@@ -118,12 +179,9 @@ namespace AmpelSimulation
                 int x = (int)(trafficLight.PositionX * scaleFactor) - 12;
                 int y = (int)(trafficLight.PositionY * scaleFactor) - 12;
 
-
-
                 Rectangle rectRed = new Rectangle(x, y + 0 * step, size, size);
                 Rectangle rectYellow = new Rectangle(x, y + 1 * step, size, size);
                 Rectangle rectGreen = new Rectangle(x, y + 2 * step, size, size);
-
 
                 if (trafficLight.CurrentState == TrafficLightState.Green)
                 {
