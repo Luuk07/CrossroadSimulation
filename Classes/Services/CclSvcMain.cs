@@ -22,7 +22,7 @@ namespace AmpelSimulation.Classes.Services
 
         public int intervalTimer = 1; 
 
-        public int multipleTempo = 1; // Speed of simulation 
+        public int multipleTempo = 5; // Speed of simulation 
 
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; }
@@ -54,9 +54,9 @@ namespace AmpelSimulation.Classes.Services
         // Methods
 
         // Main timer tick method
-        private async void MainTick(object sender, ElapsedEventArgs e)
+        private void MainTick(object sender, ElapsedEventArgs e)
         {
-            foreach (var car in CrossroadHandler.l_CarHandler.Where(c=>c.Car.Speed == 0))
+            foreach (var car in CrossroadHandler.l_CarHandler.Where(c=>c.Car.Speed == 0).ToList())
             {
                 currentStoppedCars++;
             }
