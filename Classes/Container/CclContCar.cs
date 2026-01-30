@@ -35,14 +35,14 @@ namespace AmpelSimulation.Classes.Container
 
         public double Speed { get; set; } = 1 ;
 
-        // public double Speed { get { return (PS / Weight) * 100; } } If cars should be faster/slower
+       
 
         //Eventhandler
         public event EventHandler PositionChanged;
 
         public event EventHandler CarStopped;
 
-        // Constructor
+        
 
         // Methods
         // Method check if car is at TrafficLight
@@ -158,29 +158,21 @@ namespace AmpelSimulation.Classes.Container
             switch (LaneID)
             {
                 case 1:      
-                    // Fahren bis zu einem bestimmten Punkt dann switch Lane
-                   // CurrentLane.ID = 4;
+                   
                     CurrentLane = ResolveLaneById(2); // wechselt NUR die Lane-Referenz des Autos
                     StartOrContinueDriving(LaneID);
-                    //PositionX -= Speed;
                     break;
                 case 2:
-                    //CurrentLane.ID = 1;
                     CurrentLane = ResolveLaneById(3); 
                     StartOrContinueDriving(LaneID);
-                    //PositionY += Speed;
                     break;
                 case 3:
-                    //CurrentLane.ID = 2;
                     CurrentLane = ResolveLaneById(4); 
-                    StartOrContinueDriving(LaneID);
-                    //PositionX += Speed;
+                    StartOrContinueDriving(LaneID);  
                     break;
                 case 4:
-                    //CurrentLane.ID = 3;
                     CurrentLane = ResolveLaneById(1); 
                     StartOrContinueDriving(LaneID);
-                    //PositionY -= Speed;
                     break;
                 default:
                     break;
@@ -194,34 +186,27 @@ namespace AmpelSimulation.Classes.Container
             switch (LaneID)
             {
                 case 1:
-                    //CurrentLane.ID = 2;
                     CurrentLane = ResolveLaneById(4); 
                     StartOrContinueDriving(LaneID);
-                    //PositionX += Speed;
                     break;
                 case 2:
-                    //CurrentLane.ID = 3;
                     CurrentLane = ResolveLaneById(1); 
-                    StartOrContinueDriving(LaneID);
-                    //PositionY -= Speed;
+                    StartOrContinueDriving(LaneID);               
                     break;
                 case 3:
-                    //CurrentLane.ID = 4;
                     CurrentLane = ResolveLaneById(2); 
                     StartOrContinueDriving(LaneID);
-                    //PositionX -= Speed;
                     break;
                 case 4:
-                    //CurrentLane.ID = 1;
                     CurrentLane = ResolveLaneById(3); 
-                    StartOrContinueDriving(LaneID);
-                    //PositionY += Speed;
+                    StartOrContinueDriving(LaneID);  
                     break;
                 default:
                     break;
             }
         }
 
+        // Method to drive straight ahead
         public void StraightAhead(int LaneID)
         {
             // Drive straight ahead

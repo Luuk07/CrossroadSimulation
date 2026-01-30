@@ -10,11 +10,12 @@ namespace AmpelSimulation.Classes.Container
     {
         public int TotalCarsPassed { get; set; } = 0;
         public int Timer { get; set; } = 0;
-
-
         public List<int> ListOfWaitingTimes { get; set; } = new List<int>();
 
 
+        // Methods
+
+        // Method to add count of stopped cars to the list
         public void AddCoutOfStopedCarsToList(int counterOfStoppedCars)
         {
             ListOfWaitingTimes.Add(counterOfStoppedCars);

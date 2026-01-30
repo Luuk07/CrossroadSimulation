@@ -48,7 +48,7 @@ namespace AmpelSimulation.Classes.Services
             Lanes = Creat.l_AllLane;
             TrafficLights = Creat.TrafficLights;
             LightHandler.TrafficLights = TrafficLights;
-            LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+            //LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
             LightHandler.SetAllTrafficLightsRedLightSeconds(29);
         }
 
@@ -86,6 +86,7 @@ namespace AmpelSimulation.Classes.Services
 
             foreach (var c in l_CarHandler.ToList())
             {
+                // Skip the current car and cars in different lanes
                 if (ReferenceEquals(c, currentCarHandler) || c.Car.CurrentLane.ID != laneID)
                     continue;
 

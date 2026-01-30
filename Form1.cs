@@ -35,10 +35,14 @@ namespace AmpelSimulation
             trackBarOfSimSpeed.Value = Main.multipleTempo;
             Main.E_Done += (s, e) =>
             {
-
+                int lowestWaitingTime = Main.CrossroadHandler.Statistic.ListOfWaitingTimes.Min();
                 MessageBox.Show(
                     string.Join(Environment.NewLine, Main.CrossroadHandler.Statistic.ListOfWaitingTimes),
                     "Wartezeiten"
+                );
+                MessageBox.Show(
+                    $"Niedrigste Wartezeit: {lowestWaitingTime} Sekunden, bei Schaltung {Main.CrossroadHandler.Statistic.ListOfWaitingTimes.FindIndex(wt => wt == lowestWaitingTime)+1}",
+                    "Statistik"
                 );
             };
 
@@ -113,7 +117,7 @@ namespace AmpelSimulation
                 int x = (int)(trafficLight.PositionX * scaleFactor)-12;
                 int y = (int)(trafficLight.PositionY * scaleFactor)-12;
 
-                // Rechteck für die Ampel (Breite = 10, Höhe = 30)
+               
 
                 Rectangle rectRed = new Rectangle(x, y + 0 * step, size, size);
                 Rectangle rectYellow = new Rectangle(x, y + 1 * step, size, size);
@@ -144,78 +148,43 @@ namespace AmpelSimulation
             }
         }
 
-        //public void Form1_PaintTrafficLight2(object sender, PaintEventArgs e)
+       
+        // Mode Button Click Events
+        //private void button1_Click(object sender, EventArgs e)
         //{
-        //    Graphics g = e.Graphics;
-        //    foreach (var trafficLight in Main.CrossroadHandler.TrafficLights)
-        //    {
-        //        // Rechteck für die Ampel (Breite = 10, Höhe = 30)
-        //        Rectangle rect = new Rectangle(
-        //            (int)trafficLight.PositionX * scaleFactor,
-        //            (int)trafficLight.PositionY * scaleFactor,
-        //            4 * scaleFactor/2, 4 * scaleFactor/2
-        //        );
-        //        if (trafficLight.CurrentState == TrafficLightState.Green)
-        //        {
-        //            using (Brush brush = new SolidBrush(Color.Green))
-        //            {
-        //                g.FillRectangle(brush, rect);
-        //            }
-        //        }
-        //        else if (trafficLight.CurrentState == TrafficLightState.Yellow)
-        //        {
-        //            using (Brush brush = new SolidBrush(Color.Yellow))
-        //            {
-        //                g.FillRectangle(brush, rect);
-        //            }
-        //        }
-        //        else if (trafficLight.CurrentState == TrafficLightState.Red)
-        //        {
-        //            using (Brush brush = new SolidBrush(Color.Red))
-        //            {
-        //                g.FillRectangle(brush, rect);
-        //            }
-        //        }
-        //        g.DrawRectangle(Pens.Black, rect);
-        //    }
+        //    Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
+        //    button1.Enabled = false;
+        //    button3.Enabled = true;
+        //    button4.Enabled = true;
+        //    button5.Enabled = true;
         //}
 
-        // Mode Button Click Events
-        private void button1_Click(object sender, EventArgs e)
-        {
-            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeOne);
-            button1.Enabled = false;
-            button3.Enabled = true;
-            button4.Enabled = true;
-            button5.Enabled = true;
-        }
+        //private void button3_Click(object sender, EventArgs e)
+        //{
+        //    Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeTwo);
+        //    button1.Enabled = true;
+        //    button3.Enabled = false;
+        //    button4.Enabled = true;
+        //    button5.Enabled = true;
+        //}
 
-        private void button3_Click(object sender, EventArgs e)
-        {
-            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeTwo);
-            button1.Enabled = true;
-            button3.Enabled = false;
-            button4.Enabled = true;
-            button5.Enabled = true;
-        }
+        //private void button4_Click(object sender, EventArgs e)
+        //{
+        //    Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeThree);
+        //    button1.Enabled = true;
+        //    button3.Enabled = true;
+        //    button4.Enabled = false;
+        //    button5.Enabled = true;
+        //}
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeThree);
-            button1.Enabled = true;
-            button3.Enabled = true;
-            button4.Enabled = false;
-            button5.Enabled = true;
-        }
-
-        private void button5_Click(object sender, EventArgs e)
-        {
-            Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeFour);
-            button1.Enabled = true;
-            button3.Enabled = true;
-            button4.Enabled = true;
-            button5.Enabled = false;
-        }
+        //private void button5_Click(object sender, EventArgs e)
+        //{
+        //    Main.CrossroadHandler.LightHandler.SyncTrafficLights(TrafficLightMode.ModeFour);
+        //    button1.Enabled = true;
+        //    button3.Enabled = true;
+        //    button4.Enabled = true;
+        //    button5.Enabled = false;
+        //}
 
         
     }

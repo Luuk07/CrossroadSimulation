@@ -17,31 +17,33 @@ namespace AmpelSimulation.Classes.Container
         public int PositionX { get; set; }
         public int PositionY { get; set; }
         public int RedLightSeconds { get; set; }
+
+        public bool IsAlreadySwitched { get; set; } = false;
         // 
 
         // Methods
 
         // Method to change speed of TrafficLight based on the mode
-        public void SpeedChangeMode(TrafficLightMode mode)
-        {
-            // Change speed based on mode
-            if (mode == TrafficLightMode.ModeOne)
-            {
-                SpeedOfChanging = 1;
-            }
-            else if (mode == TrafficLightMode.ModeTwo)
-            {
-                SpeedOfChanging = 2;
-            }
-            else if (mode == TrafficLightMode.ModeThree)
-            {
-                SpeedOfChanging = 3;
-            }
-            else if (mode == TrafficLightMode.ModeFour)
-            {
-                SpeedOfChanging = 4;
-            }
+        //public void SpeedChangeMode(TrafficLightMode mode)
+        //{
+        //    // Change speed based on mode
+        //    if (mode == TrafficLightMode.ModeOne)
+        //    {
+        //        SpeedOfChanging = 1;
+        //    }
+        //    else if (mode == TrafficLightMode.ModeTwo)
+        //    {
+        //        SpeedOfChanging = 2;
+        //    }
+        //    else if (mode == TrafficLightMode.ModeThree)
+        //    {
+        //        SpeedOfChanging = 3;
+        //    }
+        //    else if (mode == TrafficLightMode.ModeFour)
+        //    {
+        //        SpeedOfChanging = 4;
+        //    }
             
-        }
+        //}
     }
 }

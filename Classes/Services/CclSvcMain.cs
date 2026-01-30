@@ -14,16 +14,15 @@ namespace AmpelSimulation.Classes.Services
         // Main service class to manage other services
         //
         private static System.Timers.Timer _timer;
+        //private int counterTrafficLight = 0;
         private int counterCarPlace = 0;
-        private int counterTrafficLight = 0;
         private int counterTimer = 0;
         private int currentStoppedCars = 0;
 
 
-        public int intervalTimer = 1; // Timer interval in milliseconds
-        public int IntervallforOneSecond { get; set; } // Default 1 second in ms
+        public int intervalTimer = 1; 
 
-        public int multipleTempo = 1; // Speed of simulation 
+        public int multipleTempo = 15; // Speed of simulation 
 
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; }
@@ -33,15 +32,14 @@ namespace AmpelSimulation.Classes.Services
         public event EventHandler E_UIUpdate;
 
         public event EventHandler E_Done;
-
-        public bool IsAlreadySwitched { get; set; } = false; // Das in TrafficLight eingebaut, hat hier eigentlich nichts zu suchen
+        //
+        public bool IsTrafficLightAlreadySwitched { get; set; } = false; 
         public CclSvcMain()
         {
-            IntervallforOneSecond = 1000 / intervalTimer;
             try
             {
                 CrossroadHandler = new CclSvcHandleCrossroad();
-                _timer = new System.Timers.Timer(intervalTimer); // Set the timer interval to 12 milliseconds
+                _timer = new System.Timers.Timer(intervalTimer);
                 _timer.Elapsed += MainTick;
                 _timer.AutoReset = true;
                 _timer.Enabled = false;
@@ -62,10 +60,8 @@ namespace AmpelSimulation.Classes.Services
             {
                 currentStoppedCars++;
             }
-
-
             counterCarPlace++;
-            counterTrafficLight++;
+            //counterTrafficLight++;
             counterTimer++;
             CrossroadHandler.MoveCarsInCrossroad();
             CrossroadHandler.RemoveCarFromCrossroad();
@@ -87,7 +83,8 @@ namespace AmpelSimulation.Classes.Services
                 E_UIUpdate?.Invoke(this, EventArgs.Empty);
                 _timer.Start();
             }
-
+            CheckSimulationState();
+            TrafficLightSetup();
             //if (CrossroadHandler.Statistic.Timer >= 30)
             //{
             //    switch (CrossroadHandler.TrafficLights.FirstOrDefault().CurrentMode)
@@ -169,23 +166,23 @@ namespace AmpelSimulation.Classes.Services
             //    default:
             //        break;
             //}
-            CheckSimulationState();
-            TrafficLightSetup();
-        }
 
+        }
+        // Traffic light setup method
         public async void TrafficLightSetup()
         {
-            if (!IsAlreadySwitched)
+            //Check if the traffic light has already been switched in this cycle
+            if (!IsTrafficLightAlreadySwitched)
             {
+                // Check the red light seconds of the traffic lights and change color accordingly
                 switch (CrossroadHandler.LightHandler.TrafficLights.FirstOrDefault().RedLightSeconds)
                 {
                     case 1:
                         {
                             if (CrossroadHandler.Statistic.Timer >= 1)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -193,9 +190,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 2)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -203,9 +199,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 3)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -213,9 +208,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 4)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -223,9 +217,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 5)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -233,9 +226,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 6)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -243,9 +235,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 7)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -253,9 +244,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 8)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -263,9 +253,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 9)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -273,9 +262,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 10)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -283,9 +271,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 11)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -293,9 +280,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 12)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -304,7 +290,7 @@ namespace AmpelSimulation.Classes.Services
                             if (CrossroadHandler.Statistic.Timer >= 13)
                             {
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -312,9 +298,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 14)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -322,9 +307,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 15)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -332,9 +316,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 16)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -343,7 +326,7 @@ namespace AmpelSimulation.Classes.Services
                             if (CrossroadHandler.Statistic.Timer >= 17)
                             {
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -351,9 +334,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 18)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -361,9 +343,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 19)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -371,9 +352,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 20)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -382,9 +362,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 21)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -392,9 +371,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 22)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -402,9 +380,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 23)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -412,9 +389,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 24)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -422,9 +398,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 25)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -432,9 +407,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 26)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -442,9 +416,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 27)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -452,9 +425,8 @@ namespace AmpelSimulation.Classes.Services
                         {
                             if (CrossroadHandler.Statistic.Timer >= 28)
                             {
-
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
@@ -464,19 +436,13 @@ namespace AmpelSimulation.Classes.Services
                             {
 
                                 await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                                IsAlreadySwitched = true;
+                                IsTrafficLightAlreadySwitched = true;
                             }
                             break;
                         }
                     default:
-                        {
-                            //if (CrossroadHandler.Statistic.Timer >= 33)
-                            //{
-                            //    CrossroadHandler.Statistic.Timer = 0;
-                            //    await CrossroadHandler.LightHandler.ChangeColorOfTrafficLight();
-                            //    IsAlreadySwitched = true;
-                            //}
-                            E_Done?.Invoke(this, EventArgs.Empty);
+                        {                    
+                            //E_Done?.Invoke(this, EventArgs.Empty);
                             break;
                         }
 
@@ -488,9 +454,10 @@ namespace AmpelSimulation.Classes.Services
 
         public void CheckSimulationState()
         {
-            // 30 Sekunden plus 2 sekunden gelbphase = 32
+            //30 seconds one passage end plus 2 seconds yellow light
             if (CrossroadHandler.Statistic.Timer >= 32)
             {
+                // Reducing the red light seconds for next passage
                 switch (CrossroadHandler.TrafficLights.FirstOrDefault().RedLightSeconds)
                 {
                     case 29: { CrossroadHandler.LightHandler.SetAllTrafficLightsRedLightSeconds(28); break; }
@@ -526,14 +493,14 @@ namespace AmpelSimulation.Classes.Services
                     case 1: { CrossroadHandler.LightHandler.SetAllTrafficLightsRedLightSeconds(0); 
                             E_Done?.Invoke(this, EventArgs.Empty); 
                             _timer.Stop();
-                            break; } // Wrap-around
+                            break; } 
                     default:
                         {
                             _timer.Stop();
                             break;
                         }
                 }
-                IsAlreadySwitched = false;
+                IsTrafficLightAlreadySwitched = false;
                 CrossroadHandler.l_CarHandler.Clear();
                 CrossroadHandler.Statistic.Timer = 0;
                 CrossroadHandler.Statistic.AddCoutOfStopedCarsToList(currentStoppedCars);
@@ -541,15 +508,25 @@ namespace AmpelSimulation.Classes.Services
             }
         }
 
+        // Scale yellow light duration based on Speed of simulation 
         public void ScaleYellowLightDurationBasedOnIntervall(int multiple)
         {
             CrossroadHandler.LightHandler.yellowLightMilliSeconds = CrossroadHandler.LightHandler.yellowLightMilliSeconds/ multiple;
         }
+
+        // Scale Waiting Time duration based on Speed of simulation 
         public void ScaleWaitingTimeForChangingBasedOnIntervall(int multiple)
         {
             CrossroadHandler.CarHandler.waitingTimeForChanging = CrossroadHandler.CarHandler.waitingTimeForChanging / multiple;
-            CrossroadHandler.CarHandler.Car.Speed = CrossroadHandler.CarHandler.Car.Speed * multiple; // Damit die Autos sich schneller bewegen, weiß nicht ob gut,
-                                                                                                      // aber wenn nicht dann sind bei schnelleren Simulationstempo die Autos zu langsam unterwegs
+
         }
+
+
+        
+
+        //public void ScaleCarSpeedBasedOnIntervall(int multiple)
+        //{
+        //    CrossroadHandler.CarHandler.Car.Speed = CrossroadHandler.CarHandler.Car.Speed * multiple;
+        //}
     }
 }

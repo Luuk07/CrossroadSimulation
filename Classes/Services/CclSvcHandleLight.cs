@@ -22,13 +22,13 @@ namespace AmpelSimulation.Classes.Services
         // Methods 
 
         // Method to sync all traffic lights in the crossroad and give them the same mode
-        public void SyncTrafficLights(TrafficLightMode Mode)
-        {
-            foreach (var light in TrafficLights)
-            {
-                light.SpeedChangeMode(Mode);
-            }
-        }
+        //public void SyncTrafficLights(TrafficLightMode Mode)
+        //{
+        //    foreach (var light in TrafficLights)
+        //    {
+        //        light.SpeedChangeMode(Mode);
+        //    }
+        //}
         public void SetAllTrafficLightsRedLightSeconds(int redLightSeconds)
         {
             foreach (var light in TrafficLights)
@@ -40,26 +40,25 @@ namespace AmpelSimulation.Classes.Services
         // Method to change the color of all traffic lights in the crossroad
         public async Task ChangeColorOfTrafficLight()
         {
-            // Verhindert parallele Umschaltungen
+            //Avoid parallel transitions,so isnt possible that the method is called again while transitioning
             if (System.Threading.Interlocked.Exchange(ref _isTransitioning, 1) == 1)
                 return;
 
-
             try
             {
-                // Snapshot vor Gelb
+                // Snapshot previous states
                 var previous = TrafficLights.ToDictionary(l => l, l => l.CurrentState);
 
-                // Alle auf Gelb
+                // All traffic lights to Yellow
                 foreach (var l in TrafficLights)
                 {
                     SetState(l, TrafficLightState.Yellow);
                 }
 
-                // Gelb-Dauer
+                // Duration of yellow light
                 await Task.Delay(yellowLightMilliSeconds).ConfigureAwait(false);
 
-                // Zustände auf Basis von previous togglen
+                // Set new states based on previous
                 foreach (var l in TrafficLights)
                 {
                     var prev = previous[l];
@@ -74,15 +73,14 @@ namespace AmpelSimulation.Classes.Services
                     }
                     else
                     {
-                        // Optional: Fallback KONSISTENT halten.
-                        // Empfehlung: Einheitlich auf Red ODER auf Green,
-                        // aber ohne ID-sonderlogik (die erzeugt Asymmetrien).
+                        // Here we choose Red as a safe default
                         SetState(l, TrafficLightState.Red);
                     }
                 }
             }
             finally
             {
+                // Reset transitioning flag, so its possible to call the method again
                 System.Threading.Interlocked.Exchange(ref _isTransitioning, 0);
             }
 
