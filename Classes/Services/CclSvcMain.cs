@@ -445,11 +445,8 @@ namespace AmpelSimulation.Classes.Services
                             //E_Done?.Invoke(this, EventArgs.Empty);
                             break;
                         }
-
                 }
-
             }
-
         }
 
         public void CheckSimulationState()
@@ -518,11 +515,7 @@ namespace AmpelSimulation.Classes.Services
         public void ScaleWaitingTimeForChangingBasedOnIntervall(int multiple)
         {
             CrossroadHandler.CarHandler.waitingTimeForChanging = CrossroadHandler.CarHandler.waitingTimeForChanging / multiple;
-
         }
-
-
-        
 
         //public void ScaleCarSpeedBasedOnIntervall(int multiple)
         //{
