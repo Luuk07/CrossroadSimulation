@@ -11,6 +11,8 @@ namespace AmpelSimulation.Classes.Container
 {
     public class CclContCar
     {
+        
+        // Properties
         public bool IsDriving { get; set; } = true;
         public bool IsIgnoringTrafficLight { get; set; } = false;
         public bool IsAlreadyTurned { get; set; } = false;
@@ -33,20 +35,26 @@ namespace AmpelSimulation.Classes.Container
             set;
         }
 
-        public double Speed { get; set; } = 1 ;
+        public double Speed { get; set; }
+        public double MultipleTempo {get; set;}
 
-       
+        public CclContCar(double multipleTempo)
+        {
+            Speed = multipleTempo;
+            MultipleTempo = multipleTempo;
+        }
 
         //Eventhandler
         public event EventHandler PositionChanged;
 
         public event EventHandler CarStopped;
 
-        
+       
+
 
         // Methods
         // Method check if car is at TrafficLight
-        public bool IsAtTrafficLight(CclContTrafficLight trafficLight, int laneID)
+        public bool IsAtTrafficLight2(CclContTrafficLight trafficLight, int laneID)
         {
             switch (laneID)
             {
@@ -72,6 +80,37 @@ namespace AmpelSimulation.Classes.Container
             return false;
 
         }
+
+        //Is check if car is at TrafficLight in an area 
+        public bool IsAtTrafficLight(
+            CclContTrafficLight trafficLight,
+            int laneID,
+            int offsetToStopLine = 12,
+            int window = 10)
+        {
+            switch (laneID)
+            {
+                case 1: // unten -> oben
+                    return this.PositionY <= trafficLight.PositionY + offsetToStopLine &&
+                           this.PositionY >= trafficLight.PositionY + offsetToStopLine - window;
+
+                case 2: // rechts -> links
+                    return this.PositionX <= trafficLight.PositionX + offsetToStopLine &&
+                           this.PositionX >= trafficLight.PositionX + offsetToStopLine - window;
+
+                case 3: // oben -> unten
+                    return this.PositionY >= trafficLight.PositionY - offsetToStopLine &&
+                           this.PositionY <= trafficLight.PositionY - offsetToStopLine + window;
+
+                case 4: // links -> rechts
+                    return this.PositionX >= trafficLight.PositionX - offsetToStopLine &&
+                           this.PositionX <= trafficLight.PositionX - offsetToStopLine + window;
+
+                default:
+                    return false;
+            }
+        }
+
 
         // Method check if car is at TurningPoint for left turn
         public bool IsAtTurningPointLeft(CclContCar car, CclContTrafficLight trafficLight, int laneID)
@@ -141,7 +180,7 @@ namespace AmpelSimulation.Classes.Container
         public void StartOrContinueDriving(int LaneID)
         {
             // Position update based on lane
-            Speed = 1; // Set speed to normal driving speed
+            Speed = MultipleTempo; // Set speed to normal driving speed
             StraightAhead(LaneID);
         }
         // Method to stop the car

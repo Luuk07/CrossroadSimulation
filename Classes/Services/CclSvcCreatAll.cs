@@ -21,10 +21,10 @@ namespace AmpelSimulation.Classes.Services
         private CclContLane GetLaneById(int id) => l_AllLane.First(l => l.ID == id);
 
         //Method to create a new car
-        public CclContCar CreateNewCar()
+        public CclContCar CreateNewCar(double multipleTempo)
         {
             // Create car logic here
-            CclContCar car = new CclContCar()
+            CclContCar car = new CclContCar(multipleTempo)
             {
                 Color = Colours[CclRandom.Random.Next(Colours.Count)],
                 PS = CclRandom.Random.Next(60, 501),

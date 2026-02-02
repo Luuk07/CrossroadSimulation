@@ -20,12 +20,13 @@ namespace AmpelSimulation.Classes.Services
 
         public List<CclSvcHandleCar> CarHandlers { get; set; }
 
-        public int waitingTimeForChanging = 1000; // in milliseconds
+        public double waitingTimeForChanging = 1000; // in milliseconds
 
         public Rectangle Rec { get; set; }
 
         public CclSvcHandleCar(CclContCar car, CclContTrafficLight trafficLight, CclSvcHandleLight lightHandler, List<CclSvcHandleCar> carHandlers)
         {
+            
             CarHandlers = carHandlers;
             Car = car;
             TrafficLight = trafficLight;
@@ -49,13 +50,7 @@ namespace AmpelSimulation.Classes.Services
                     PoitionChangedLogik(carHandlers); 
                 } 
             };
-
-         
-            // Subscribe to the E_LaneCountChanged event of the current lane which triggers the logic when the lane changes
-            //Car.CurrentLane.E_LaneCountChanged += (s, e) =>
-            //{
-            //    PoitionChangedLogik(carHandlers);
-            //};
+        
 
             // Subscribe to the CarStopped event of the car which triggers the logic when the car stops
             Car.CarStopped += async (s, e) =>
@@ -133,7 +128,7 @@ namespace AmpelSimulation.Classes.Services
         // Drive straight after delay -> to avoid blocking the crossroad
         public async Task ChangeDirectionToStraightAfterDelay(List<CclSvcHandleCar> carHandlers)
         {
-             await Task.Delay(waitingTimeForChanging); 
+             await Task.Delay((int)waitingTimeForChanging); 
              Car.IsDriving = true;
              Car.Direction = CarDirection.Straight;
              SetCarDirection();

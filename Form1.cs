@@ -33,7 +33,7 @@ namespace AmpelSimulation
             Main.CrossroadHandler.E_MoveCar += (s, e) => this.Invalidate();
             labelCounter.Text = $"Cars passed:{Main.CrossroadHandler.Statistic.TotalCarsPassed.ToString()}";
             labelTimer.Text = $"Simulation Time:{Main.CrossroadHandler.Statistic.Timer.ToString()}s";
-            trackBarOfSimSpeed.Value = Main.multipleTempo;
+            //trackBarOfSimSpeed.Value = Main.multipleTempo;
             Main.E_Done += (s, e) =>
             {
                 int lowestWaitingTime = Main.CrossroadHandler.Statistic.ListOfWaitingTimes.Min();
@@ -60,14 +60,14 @@ namespace AmpelSimulation
                     // Code to run on the UI thread
                     this.BeginInvoke(new Action(() =>
                     {
-                        Main.multipleTempo = trackBarOfSimSpeed.Value;
+                        //Main.multipleTempo = trackBarOfSimSpeed.Value;
                         UpdateUI();
                     }));
                 }
                 // Already on UI thread
                 else
                 {
-                    Main.multipleTempo = trackBarOfSimSpeed.Value;
+                    //Main.multipleTempo = trackBarOfSimSpeed.Value;
                     UpdateUI();
                 }
             };

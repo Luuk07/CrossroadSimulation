@@ -22,7 +22,7 @@ namespace AmpelSimulation.Classes.Services
 
         public int intervalTimer = 1; 
 
-        public int multipleTempo = 5; // Speed of simulation 
+        public double multipleTempo = 1; // Speed of simulation 
 
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; }
@@ -77,8 +77,9 @@ namespace AmpelSimulation.Classes.Services
             {
                 _timer.Stop();
                 counterCarPlace = 0;
-                CrossroadHandler.PlaceNewCar();
+                CrossroadHandler.PlaceNewCar(multipleTempo);
                 ScaleWaitingTimeForChangingBasedOnIntervall(multipleTempo);
+                //ScaleCarSpeedBasedOnIntervall(multipleTempo);
                 E_PlaceNewCar?.Invoke(this, EventArgs.Empty);
                 E_UIUpdate?.Invoke(this, EventArgs.Empty);
                 _timer.Start();
@@ -506,18 +507,18 @@ namespace AmpelSimulation.Classes.Services
         }
 
         // Scale yellow light duration based on Speed of simulation 
-        public void ScaleYellowLightDurationBasedOnIntervall(int multiple)
+        public void ScaleYellowLightDurationBasedOnIntervall(double multiple)
         {
             CrossroadHandler.LightHandler.yellowLightMilliSeconds = CrossroadHandler.LightHandler.yellowLightMilliSeconds/ multiple;
         }
 
         // Scale Waiting Time duration based on Speed of simulation 
-        public void ScaleWaitingTimeForChangingBasedOnIntervall(int multiple)
+        public void ScaleWaitingTimeForChangingBasedOnIntervall(double multiple)
         {
             CrossroadHandler.CarHandler.waitingTimeForChanging = CrossroadHandler.CarHandler.waitingTimeForChanging / multiple;
         }
 
-        //public void ScaleCarSpeedBasedOnIntervall(int multiple)
+        //public void ScaleCarSpeedBasedOnIntervall(double multiple)
         //{
         //    CrossroadHandler.CarHandler.Car.Speed = CrossroadHandler.CarHandler.Car.Speed * multiple;
         //}

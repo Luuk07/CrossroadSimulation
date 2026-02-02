@@ -53,9 +53,9 @@ namespace AmpelSimulation.Classes.Services
         }
 
         //Place new car in the crossroad
-        public void PlaceNewCar()
+        public void PlaceNewCar(double multipleTempo)
         {
-            Car = Creat.CreateNewCar();
+            Car = Creat.CreateNewCar(multipleTempo);
             var trafficLight = TrafficLights.FirstOrDefault(tl => tl.ID == Car.CurrentLane.ID);
             var lane = Lanes.FirstOrDefault(l => l.ID == Car.CurrentLane.ID);    
             CarHandler = new CclSvcHandleCar(Car, trafficLight, LightHandler, l_CarHandler);

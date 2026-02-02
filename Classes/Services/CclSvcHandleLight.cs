@@ -16,7 +16,7 @@ namespace AmpelSimulation.Classes.Services
 
         private int _isTransitioning = 0;
 
-        public int yellowLightMilliSeconds  = 3000;
+        public double yellowLightMilliSeconds  = 3000;
 
 
         // Methods 
@@ -56,7 +56,7 @@ namespace AmpelSimulation.Classes.Services
                 }
 
                 // Duration of yellow light
-                await Task.Delay(yellowLightMilliSeconds).ConfigureAwait(false);
+                await Task.Delay((int)yellowLightMilliSeconds).ConfigureAwait(false);
 
                 // Set new states based on previous
                 foreach (var l in TrafficLights)
