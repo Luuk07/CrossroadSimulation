@@ -21,6 +21,8 @@ namespace AmpelSimulation
         private SolidBrush brushGreenOff = new SolidBrush(Color.FromArgb(0, 102, 0));
 
 
+
+
         public Form1()
         {
             Main = new CclSvcMain();
@@ -70,6 +72,8 @@ namespace AmpelSimulation
                     //Main.multipleTempo = trackBarOfSimSpeed.Value;
                     UpdateUI();
                 }
+
+              
             };
         }
 
@@ -91,6 +95,7 @@ namespace AmpelSimulation
             Graphics g = e.Graphics;
             foreach (var CarHandler in Main.CrossroadHandler.l_CarHandler.ToList())
             {
+                
                 Rectangle rect = new Rectangle(
                     (int)CarHandler.Car.PositionX * scaleFactor,
                     (int)CarHandler.Car.PositionY * scaleFactor,
@@ -132,10 +137,23 @@ namespace AmpelSimulation
                         default:
                             break;
                     }
-                    using (Brush brush = new SolidBrush(Color.Orange))
+                    if (CarHandler.HasColorForTurning == false)
                     {
-                        g.FillRectangle(brush, rectLeftCorner);
+                        using (Brush brush = new SolidBrush(Color.Orange))
+                        {
+                            g.FillRectangle(brush, rectLeftCorner);
+                        }
+                        _ = CarHandler.SetColorForTurningAsync(true); //_ = to avoid warning, starting Method without await
                     }
+                    else
+                    {
+                        using (Brush brush = new SolidBrush(Color.Black))
+                        {
+                            g.FillRectangle(brush, rectLeftCorner);
+                        }
+                        _ = CarHandler.SetColorForTurningAsync(false);
+                    }
+                   
                 }
                 if (CarHandler.Car.Direction == CarDirection.Right)
                 {
@@ -156,9 +174,21 @@ namespace AmpelSimulation
                         default:
                             break;
                     }
-                    using (Brush brush = new SolidBrush(Color.Orange))
+                    if (CarHandler.HasColorForTurning == false)
                     {
-                        g.FillRectangle(brush, rectRightCorner);
+                        using (Brush brush = new SolidBrush(Color.Orange))
+                        {
+                            g.FillRectangle(brush, rectRightCorner);
+                        }
+                        CarHandler.HasColorForTurning = true;
+                    }
+                    else
+                    {
+                        using (Brush brush = new SolidBrush(Color.Black))
+                        {
+                            g.FillRectangle(brush, rectRightCorner);
+                        }
+                        CarHandler.HasColorForTurning = false;
                     }
                 }
 

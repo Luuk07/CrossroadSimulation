@@ -23,17 +23,8 @@ namespace AmpelSimulation.Classes.Container
         public Func<int, CclContLane> ResolveLaneById { get; set; } 
         public double Weight { get; set; }
 
-        public double PositionX
-        {
-            get;
-            set;
-        } 
-          
-        public double PositionY 
-        {
-            get;
-            set;
-        }
+        public double PositionX {get; set;} 
+        public double PositionY {get; set;}
 
         public double Speed { get; set; }
         public double MultipleTempo {get; set;}
@@ -82,35 +73,33 @@ namespace AmpelSimulation.Classes.Container
         }
 
         //Is check if car is at TrafficLight in an area 
-        public bool IsAtTrafficLight(
-            CclContTrafficLight trafficLight,
-            int laneID,
-            int offsetToStopLine = 12,
-            int window = 10)
+        public bool IsAtTrafficLight(CclContTrafficLight trafficLight, int laneID)
         {
+            int offsetToStopLine = 12;
+            double window = 6;
+            if (Speed>22)
+            {
+                window = Speed/2 +6;
+            }
+            
             switch (laneID)
             {
-                case 1: // unten -> oben
+                case 1: 
                     return this.PositionY <= trafficLight.PositionY + offsetToStopLine &&
                            this.PositionY >= trafficLight.PositionY + offsetToStopLine - window;
-
-                case 2: // rechts -> links
+                case 2: 
                     return this.PositionX <= trafficLight.PositionX + offsetToStopLine &&
                            this.PositionX >= trafficLight.PositionX + offsetToStopLine - window;
-
-                case 3: // oben -> unten
+                case 3: 
                     return this.PositionY >= trafficLight.PositionY - offsetToStopLine &&
                            this.PositionY <= trafficLight.PositionY - offsetToStopLine + window;
-
-                case 4: // links -> rechts
+                case 4: 
                     return this.PositionX >= trafficLight.PositionX - offsetToStopLine &&
                            this.PositionX <= trafficLight.PositionX - offsetToStopLine + window;
-
                 default:
                     return false;
             }
         }
-
 
         // Method check if car is at TurningPoint for left turn
         public bool IsAtTurningPointLeft(CclContCar car, CclContTrafficLight trafficLight, int laneID)

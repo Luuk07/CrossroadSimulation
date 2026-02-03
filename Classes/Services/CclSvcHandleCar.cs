@@ -22,6 +22,8 @@ namespace AmpelSimulation.Classes.Services
 
         public double waitingTimeForChanging = 1000; // in milliseconds
 
+        public bool HasColorForTurning { get; set; } = false;
+
         public Rectangle Rec { get; set; }
 
         public CclSvcHandleCar(CclContCar car, CclContTrafficLight trafficLight, CclSvcHandleLight lightHandler, List<CclSvcHandleCar> carHandlers)
@@ -238,6 +240,14 @@ namespace AmpelSimulation.Classes.Services
             }
 
             return true;
+        }
+
+        public async Task SetColorForTurningAsync(bool value)
+        {
+            await Task.Delay((int)waitingTimeForChanging);
+
+            HasColorForTurning = value;
+
         }
 
     }

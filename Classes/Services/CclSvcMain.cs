@@ -18,11 +18,12 @@ namespace AmpelSimulation.Classes.Services
         private int counterCarPlace = 0;
         private int counterTimer = 0;
         private int currentStoppedCars = 0;
+        private int blinkingCounter = 0;    
 
 
         public int intervalTimer = 1; 
 
-        public double multipleTempo = 1; // Speed of simulation 
+        public double multipleTempo = 1; // Speed of simulation, 22 max. If higher, cars skip the traffic light check zone
 
         //
         public CclSvcHandleCrossroad CrossroadHandler { get; set; }
@@ -62,6 +63,7 @@ namespace AmpelSimulation.Classes.Services
             }
             counterCarPlace++;
             //counterTrafficLight++;
+            blinkingCounter++;
             counterTimer++;
             CrossroadHandler.MoveCarsInCrossroad();
             CrossroadHandler.RemoveCarFromCrossroad();
@@ -84,6 +86,8 @@ namespace AmpelSimulation.Classes.Services
                 E_UIUpdate?.Invoke(this, EventArgs.Empty);
                 _timer.Start();
             }
+            
+
             CheckSimulationState();
             TrafficLightSetup();
             //if (CrossroadHandler.Statistic.Timer >= 30)
